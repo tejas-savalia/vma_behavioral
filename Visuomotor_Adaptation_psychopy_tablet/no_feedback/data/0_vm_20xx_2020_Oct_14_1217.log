@@ -1,0 +1,388 @@
+2.0099 	WARNING 	We strongly recommend you activate the PTB sound engine in PsychoPy prefs as the preferred audio engine. Its timing is vastly superior. Your prefs are currently set to use ['sounddevice', 'PTB', 'pyo', 'pygame'] (in that order).
+14.7408 	WARNING 	Couldn't measure a consistent frame rate.
+  - Is your graphics card set to sync to vertical blank?
+  - Are you running other processes on your computer?
+
+14.7412 	EXP 	Created window1 = Window(allowGUI=False, allowStencil=False, args=UNKNOWN, autoLog=True, bitsMode=UNKNOWN, blendMode='avg', bpc=(8, 8, 8), color=array([0., 0., 0.]), colorSpace='rgb', depthBits=8, fullscr=<method-wrapper '__getattribute__' of attributeSetter object at 0x0000024B33BFC278>, gamma=None, gammaErrorPolicy='raise', kwargs=UNKNOWN, lms=UNKNOWN, monitor=<psychopy.monitors.calibTools.Monitor object at 0x0000024B33AE82B0>, multiSample=False, name='window1', numSamples=2, pos=[0.0, 0.0], screen=0, size=array([1920, 1080]), stencilBits=0, stereo=False, units='height', useFBO=True, useRetina=False, viewOri=0.0, viewPos=None, viewScale=None, waitBlanking=True, winType='pyglet')
+14.7415 	EXP 	window1: mouseVisible = True
+14.7416 	EXP 	window1: recordFrameIntervals = False
+14.9046 	EXP 	window1: recordFrameIntervals = True
+14.9827 	WARNING 	t of last frame was 23.82ms (=1/41)
+15.0079 	WARNING 	t of last frame was 25.13ms (=1/39)
+15.0623 	WARNING 	t of last frame was 22.11ms (=1/45)
+15.1315 	WARNING 	t of last frame was 24.27ms (=1/41)
+15.2638 	WARNING 	Multiple dropped frames have occurred - I'll stop bothering you about them!
+16.6236 	WARNING 	Couldn't measure a consistent frame rate.
+  - Is your graphics card set to sync to vertical blank?
+  - Are you running other processes on your computer?
+
+16.9395 	EXP 	Created Welcome = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color='white', colorSpace='named', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.04, italic=False, languageStyle='LTR', name='Welcome', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=array([255., 255., 255.]), text=str(...), units='height', win=Window(...), wrapWidth=1)
+16.9396 	EXP 	window1: mouseVisible = True
+16.9475 	EXP 	Created text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color='white', colorSpace='named', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.04, italic=False, languageStyle='LTR', name='text', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=array([255., 255., 255.]), text=str(...), units='height', win=Window(...), wrapWidth=1)
+16.9476 	EXP 	window1: mouseVisible = True
+16.9543 	EXP 	Created demo_enclosing_1 = Polygon(__class__=<class 'psychopy.visual.polygon.Polygon'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace=None, contrast=1.0, depth=-1.0, fillColor=array([0., 0., 0.]), fillColorSpace='rgb', fillRGB=array([0., 0., 0.]), interpolate=True, lineColor=array([-1., -1., -1.]), lineColorSpace='rgb', lineRGB=array([-1., -1., -1.]), lineWidth=1, name='demo_enclosing_1', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([0.89, 0.89]), units='height', vertices=ndarray(...), win=Window(...))
+16.9572 	EXP 	Created demo_enclosing = Polygon(__class__=<class 'psychopy.visual.polygon.Polygon'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace=None, contrast=1.0, depth=-2.0, fillColor=array([0., 0., 0.]), fillColorSpace='rgb', fillRGB=array([0., 0., 0.]), interpolate=True, lineColor=array([-1., -1., -1.]), lineColorSpace='rgb', lineRGB=array([-1., -1., -1.]), lineWidth=1, name='demo_enclosing', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([0.8, 0.8]), units='height', vertices=ndarray(...), win=Window(...))
+16.9587 	EXP 	Created demo_target = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, autoDraw=False, autoLog=True, closeShape=True, contrast=1.0, depth=-3.0, fillColor=array([1., 1., 1.]), fillColorSpace='rgb', interpolate=True, lineColor=array([1., 1., 1.]), lineColorSpace='rgb', lineWidth=1, name='demo_target', opacity=1.0, ori=array(45.), pos=array([0., 0.]), size=array([0.05, 0.05]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+16.9609 	EXP 	Created demo_fixation = Polygon(__class__=<class 'psychopy.visual.polygon.Polygon'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace=None, contrast=1.0, depth=-4.0, fillColor=array([1., 0., 0.]), fillColorSpace='rgb', fillRGB=array([1., 0., 0.]), interpolate=True, lineColor=array([1., 0., 0.]), lineColorSpace='rgb', lineRGB=array([1., 0., 0.]), lineWidth=1, name='demo_fixation', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([0.025, 0.025]), units='height', vertices=ndarray(...), win=Window(...))
+16.9610 	EXP 	window1: mouseVisible = True
+16.9676 	EXP 	Created demo_enclosing_feedback_1 = Polygon(__class__=<class 'psychopy.visual.polygon.Polygon'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace=None, contrast=1.0, depth=0.0, fillColor=array([0., 0., 0.]), fillColorSpace='rgb', fillRGB=array([0., 0., 0.]), interpolate=True, lineColor=array([-1., -1., -1.]), lineColorSpace='rgb', lineRGB=array([-1., -1., -1.]), lineWidth=1, name='demo_enclosing_feedback_1', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([0.9, 0.9]), units='height', vertices=ndarray(...), win=Window(...))
+16.9707 	EXP 	Created demo_enclosing_feedback = Polygon(__class__=<class 'psychopy.visual.polygon.Polygon'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace=None, contrast=1.0, depth=-1.0, fillColor=array([0., 0., 0.]), fillColorSpace='rgb', fillRGB=array([0., 0., 0.]), interpolate=True, lineColor=array([-1., -1., -1.]), lineColorSpace='rgb', lineRGB=array([-1., -1., -1.]), lineWidth=1, name='demo_enclosing_feedback', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([0.79, 0.79]), units='height', vertices=ndarray(...), win=Window(...))
+16.9734 	EXP 	Created demo_target_feedback = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, autoDraw=False, autoLog=True, closeShape=True, contrast=1.0, depth=-2.0, fillColor=array([1., 1., 1.]), fillColorSpace='rgb', interpolate=True, lineColor=array([1., 1., 1.]), lineColorSpace='rgb', lineWidth=1, name='demo_target_feedback', opacity=1.0, ori=array(45.), pos=array([0., 0.]), size=array([0.05, 0.05]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+16.9769 	EXP 	Created demo_fixation_feedback = Polygon(__class__=<class 'psychopy.visual.polygon.Polygon'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace=None, contrast=1.0, depth=-3.0, fillColor=array([1., 0., 0.]), fillColorSpace='rgb', fillRGB=array([1., 0., 0.]), interpolate=True, lineColor=array([1., 0., 0.]), lineColorSpace='rgb', lineRGB=array([1., 0., 0.]), lineWidth=1, name='demo_fixation_feedback', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([0.025, 0.025]), units='height', vertices=ndarray(...), win=Window(...))
+16.9881 	EXP 	Created demo_score_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color='green', colorSpace='named', contrast=1.0, depth=-5.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.04, italic=False, languageStyle='LTR', name='demo_score_text', opacity=1.0, ori=0, pos=array([0.4, 0.4]), rgb=array([  0., 128.,   0.]), text='default text', units='height', win=Window(...), wrapWidth=1)
+16.9984 	EXP 	Created text_3 = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color='white', colorSpace='named', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.04, italic=False, languageStyle='LTR', name='text_3', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=array([255., 255., 255.]), text=str(...), units='height', win=Window(...), wrapWidth=1)
+16.9985 	EXP 	window1: mouseVisible = True
+17.0051 	EXP 	Created baseline_enclosing_1 = Polygon(__class__=<class 'psychopy.visual.polygon.Polygon'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace=None, contrast=1.0, depth=-1.0, fillColor=array([0., 0., 0.]), fillColorSpace='rgb', fillRGB=array([0., 0., 0.]), interpolate=True, lineColor=array([-1., -1., -1.]), lineColorSpace='rgb', lineRGB=array([-1., -1., -1.]), lineWidth=1, name='baseline_enclosing_1', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([0.89, 0.89]), units='height', vertices=ndarray(...), win=Window(...))
+17.0113 	EXP 	Created baseline_enclosing = Polygon(__class__=<class 'psychopy.visual.polygon.Polygon'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace=None, contrast=1.0, depth=-2.0, fillColor=array([0., 0., 0.]), fillColorSpace='rgb', fillRGB=array([0., 0., 0.]), interpolate=True, lineColor=array([-1., -1., -1.]), lineColorSpace='rgb', lineRGB=array([-1., -1., -1.]), lineWidth=1, name='baseline_enclosing', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([0.8, 0.8]), units='height', vertices=ndarray(...), win=Window(...))
+17.0130 	EXP 	Created baseline_target = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, autoDraw=False, autoLog=True, closeShape=True, contrast=1.0, depth=-3.0, fillColor=array([1., 1., 1.]), fillColorSpace='rgb', interpolate=True, lineColor=array([1., 1., 1.]), lineColorSpace='rgb', lineWidth=1, name='baseline_target', opacity=1.0, ori=array(45.), pos=array([0., 0.]), size=array([0.05, 0.05]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.0180 	EXP 	Created baseline_fixation = Polygon(__class__=<class 'psychopy.visual.polygon.Polygon'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace=None, contrast=1.0, depth=-4.0, fillColor=array([1., 0., 0.]), fillColorSpace='rgb', fillRGB=array([1., 0., 0.]), interpolate=True, lineColor=array([1., 0., 0.]), lineColorSpace='rgb', lineRGB=array([1., 0., 0.]), lineWidth=1, name='baseline_fixation', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([0.025, 0.025]), units='height', vertices=ndarray(...), win=Window(...))
+17.0182 	EXP 	window1: mouseVisible = True
+17.0236 	EXP 	Created baseline_enclosing_feedback_1 = Polygon(__class__=<class 'psychopy.visual.polygon.Polygon'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace=None, contrast=1.0, depth=0.0, fillColor=array([0., 0., 0.]), fillColorSpace='rgb', fillRGB=array([0., 0., 0.]), interpolate=True, lineColor=array([-1., -1., -1.]), lineColorSpace='rgb', lineRGB=array([-1., -1., -1.]), lineWidth=1, name='baseline_enclosing_feedback_1', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([0.9, 0.9]), units='height', vertices=ndarray(...), win=Window(...))
+17.0283 	EXP 	Created baseline_enclosing_feedback = Polygon(__class__=<class 'psychopy.visual.polygon.Polygon'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace=None, contrast=1.0, depth=-1.0, fillColor=array([0., 0., 0.]), fillColorSpace='rgb', fillRGB=array([0., 0., 0.]), interpolate=True, lineColor=array([-1., -1., -1.]), lineColorSpace='rgb', lineRGB=array([-1., -1., -1.]), lineWidth=1, name='baseline_enclosing_feedback', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([0.8, 0.8]), units='height', vertices=ndarray(...), win=Window(...))
+17.0298 	EXP 	Created baseline_target_feedback = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, autoDraw=False, autoLog=True, closeShape=True, contrast=1.0, depth=-2.0, fillColor=array([1., 1., 1.]), fillColorSpace='rgb', interpolate=True, lineColor=array([1., 1., 1.]), lineColorSpace='rgb', lineWidth=1, name='baseline_target_feedback', opacity=1.0, ori=array(45.), pos=array([0., 0.]), size=array([0.05, 0.05]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.0350 	EXP 	Created baseline_fixation_feedback = Polygon(__class__=<class 'psychopy.visual.polygon.Polygon'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace=None, contrast=1.0, depth=-3.0, fillColor=array([1., 0., 0.]), fillColorSpace='rgb', fillRGB=array([1., 0., 0.]), interpolate=True, lineColor=array([1., 0., 0.]), lineColorSpace='rgb', lineRGB=array([1., 0., 0.]), lineWidth=1, name='baseline_fixation_feedback', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([0.025, 0.025]), units='height', vertices=ndarray(...), win=Window(...))
+17.0381 	EXP 	Created baseline_score_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color='green', colorSpace='named', contrast=1.0, depth=-5.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.04, italic=False, languageStyle='LTR', name='baseline_score_text', opacity=1.0, ori=0, pos=array([0.4, 0.4]), rgb=array([  0., 128.,   0.]), text='default text', units='height', win=Window(...), wrapWidth=1)
+17.0604 	EXP 	Created text_2 = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color='white', colorSpace='named', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.04, italic=False, languageStyle='LTR', name='text_2', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=array([255., 255., 255.]), text=str(...), units='height', win=Window(...), wrapWidth=1)
+17.0606 	EXP 	window1: mouseVisible = True
+17.0701 	EXP 	Created rotated_enclosing_1 = Polygon(__class__=<class 'psychopy.visual.polygon.Polygon'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace=None, contrast=1.0, depth=-1.0, fillColor=array([0., 0., 0.]), fillColorSpace='rgb', fillRGB=array([0., 0., 0.]), interpolate=True, lineColor=array([-1., -1., -1.]), lineColorSpace='rgb', lineRGB=array([-1., -1., -1.]), lineWidth=1, name='rotated_enclosing_1', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([0.89, 0.89]), units='height', vertices=ndarray(...), win=Window(...))
+17.0752 	EXP 	Created rotated_enclosing = Polygon(__class__=<class 'psychopy.visual.polygon.Polygon'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace=None, contrast=1.0, depth=-2.0, fillColor=array([0., 0., 0.]), fillColorSpace='rgb', fillRGB=array([0., 0., 0.]), interpolate=True, lineColor=array([-1., -1., -1.]), lineColorSpace='rgb', lineRGB=array([-1., -1., -1.]), lineWidth=1, name='rotated_enclosing', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([0.8, 0.8]), units='height', vertices=ndarray(...), win=Window(...))
+17.0768 	EXP 	Created rotated_target = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, autoDraw=False, autoLog=True, closeShape=True, contrast=1.0, depth=-3.0, fillColor=array([1., 1., 1.]), fillColorSpace='rgb', interpolate=True, lineColor=array([1., 1., 1.]), lineColorSpace='rgb', lineWidth=1, name='rotated_target', opacity=1.0, ori=array(45.), pos=array([0., 0.]), size=array([0.05, 0.05]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.0795 	EXP 	Created rotated_fixation = Polygon(__class__=<class 'psychopy.visual.polygon.Polygon'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace=None, contrast=1.0, depth=-4.0, fillColor=array([1., 0., 0.]), fillColorSpace='rgb', fillRGB=array([1., 0., 0.]), interpolate=True, lineColor=array([1., 0., 0.]), lineColorSpace='rgb', lineRGB=array([1., 0., 0.]), lineWidth=1, name='rotated_fixation', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([0.025, 0.025]), units='height', vertices=ndarray(...), win=Window(...))
+17.0796 	EXP 	window1: mouseVisible = True
+17.0865 	EXP 	Created rotated_enclosing_feedback_1 = Polygon(__class__=<class 'psychopy.visual.polygon.Polygon'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace=None, contrast=1.0, depth=0.0, fillColor=array([0., 0., 0.]), fillColorSpace='rgb', fillRGB=array([0., 0., 0.]), interpolate=True, lineColor=array([-1., -1., -1.]), lineColorSpace='rgb', lineRGB=array([-1., -1., -1.]), lineWidth=1, name='rotated_enclosing_feedback_1', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([0.89, 0.89]), units='height', vertices=ndarray(...), win=Window(...))
+17.0878 	EXP 	Created rotated_enclosing_feedback = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, autoDraw=False, autoLog=True, closeShape=True, contrast=1.0, depth=-1.0, fillColor=array([0., 0., 0.]), fillColorSpace='rgb', interpolate=True, lineColor=array([-1., -1., -1.]), lineColorSpace='rgb', lineWidth=1, name='rotated_enclosing_feedback', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([1., 1.]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.0893 	EXP 	Created rotated_target_feedback = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, autoDraw=False, autoLog=True, closeShape=True, contrast=1.0, depth=-2.0, fillColor=array([1., 1., 1.]), fillColorSpace='rgb', interpolate=True, lineColor=array([1., 1., 1.]), lineColorSpace='rgb', lineWidth=1, name='rotated_target_feedback', opacity=1.0, ori=array(45.), pos=array([0., 0.]), size=array([0.05, 0.05]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.0915 	EXP 	Created rotated_fixation_feedback = Polygon(__class__=<class 'psychopy.visual.polygon.Polygon'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace=None, contrast=1.0, depth=-3.0, fillColor=array([1., 0., 0.]), fillColorSpace='rgb', fillRGB=array([1., 0., 0.]), interpolate=True, lineColor=array([1., 0., 0.]), lineColorSpace='rgb', lineRGB=array([1., 0., 0.]), lineWidth=1, name='rotated_fixation_feedback', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([0.025, 0.025]), units='height', vertices=ndarray(...), win=Window(...))
+17.0945 	EXP 	Created rotated_score_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color='green', colorSpace='named', contrast=1.0, depth=-5.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.04, italic=False, languageStyle='LTR', name='rotated_score_text', opacity=1.0, ori=0, pos=array([0.4, 0.4]), rgb=array([  0., 128.,   0.]), text='default text', units='height', win=Window(...), wrapWidth=1)
+17.1085 	EXP 	Created rotated_breaks = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color='white', colorSpace='named', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.04, italic=False, languageStyle='LTR', name='rotated_breaks', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=array([255., 255., 255.]), text=str(...), units='height', win=Window(...), wrapWidth=1)
+17.1086 	EXP 	window1: mouseVisible = True
+17.1111 	EXP 	Created transfer_target = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, autoDraw=False, autoLog=True, closeShape=True, contrast=1.0, depth=0.0, fillColor=array([1., 1., 1.]), fillColorSpace='rgb', interpolate=True, lineColor=array([1., 1., 1.]), lineColorSpace='rgb', lineWidth=1, name='transfer_target', opacity=1.0, ori=array(45.), pos=array([0., 0.]), size=array([0.05, 0.05]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.1136 	EXP 	Created transfer_fixation = Polygon(__class__=<class 'psychopy.visual.polygon.Polygon'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace=None, contrast=1.0, depth=-1.0, fillColor=array([1., 0., 0.]), fillColorSpace='rgb', fillRGB=array([1., 0., 0.]), interpolate=True, lineColor=array([1., 0., 0.]), lineColorSpace='rgb', lineRGB=array([1., 0., 0.]), lineWidth=1, name='transfer_fixation', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([0.025, 0.025]), units='height', vertices=ndarray(...), win=Window(...))
+17.1138 	EXP 	window1: mouseVisible = True
+17.1178 	EXP 	Created transfer_target_feedback = ShapeStim(__class__=<class 'psychopy.visual.shape.ShapeStim'>, autoDraw=False, autoLog=True, closeShape=True, contrast=1.0, depth=0.0, fillColor=array([1., 1., 1.]), fillColorSpace='rgb', interpolate=True, lineColor=array([1., 1., 1.]), lineColorSpace='rgb', lineWidth=1, name='transfer_target_feedback', opacity=1.0, ori=array(45.), pos=array([0., 0.]), size=array([0.05, 0.05]), units='height', vertices=ndarray(...), win=Window(...), windingRule=None)
+17.1202 	EXP 	Created transfer_fixation_feedback = Polygon(__class__=<class 'psychopy.visual.polygon.Polygon'>, autoDraw=False, autoLog=True, closeShape=True, color=method-wrapper(...), colorSpace=None, contrast=1.0, depth=-1.0, fillColor=array([1., 0., 0.]), fillColorSpace='rgb', fillRGB=array([1., 0., 0.]), interpolate=True, lineColor=array([1., 0., 0.]), lineColorSpace='rgb', lineRGB=array([1., 0., 0.]), lineWidth=1, name='transfer_fixation_feedback', opacity=1.0, ori=array(0.), pos=array([0., 0.]), size=array([0.025, 0.025]), units='height', vertices=ndarray(...), win=Window(...))
+17.1278 	EXP 	Created done_text = TextStim(__class__=<class 'psychopy.visual.text.TextStim'>, alignHoriz=method-wrapper(...), alignText='center', alignVert=method-wrapper(...), anchorHoriz='center', anchorVert='center', antialias=True, autoLog=True, bold=False, color='white', colorSpace='named', contrast=1.0, depth=0.0, flipHoriz=False, flipVert=False, font='Arial', fontFiles=[], height=0.04, italic=False, languageStyle='LTR', name='done_text', opacity=1.0, ori=0, pos=array([0., 0.]), rgb=array([255., 255., 255.]), text=str(...), units='height', win=Window(...), wrapWidth=1)
+17.1279 	EXP 	window1: mouseVisible = True
+17.1582 	EXP 	Welcome: autoDraw = True
+17.9243 	DATA 	Mouse: Left button down, pos=(794,632)
+17.9270 	EXP 	Created sequence: random, trialTypes=1, nReps=0, seed=None
+17.9397 	EXP 	Welcome: autoDraw = False
+17.9397 	EXP 	text_3: autoDraw = True
+18.1238 	DATA 	Mouse:  Left button up, pos=(794,632)
+19.2347 	DATA 	Mouse: Left button down, pos=(794,632)
+19.3007 	EXP 	Imported conditions_baseline.xlsx as conditions, 16 conditions, 3 params
+19.3011 	EXP 	Created sequence: random, trialTypes=16, nReps=0, seed=None
+19.3071 	EXP 	text_3: autoDraw = False
+19.3071 	EXP 	text_2: autoDraw = True
+19.4002 	DATA 	Mouse:  Left button up, pos=(794,632)
+21.2683 	DATA 	Mouse: Left button down, pos=(794,632)
+21.2710 	EXP 	Created sequence: random, trialTypes=1, nReps=10, seed=None
+21.2718 	EXP 	New trial (rep=0, index=0): None
+21.2871 	EXP 	Imported conditions_baseline.xlsx as conditions, 16 conditions, 3 params
+21.2875 	EXP 	Created sequence: random, trialTypes=16, nReps=4, seed=None
+21.2878 	EXP 	New trial (rep=0, index=0): OrderedDict([('target_x', 0.3), ('target_y', -0.3), ('rotation', 0)])
+21.2882 	EXP 	window1: mouseVisible = False
+21.2966 	EXP 	text_2: autoDraw = False
+21.2966 	EXP 	rotated_fixation: opacity = 1
+21.2966 	EXP 	rotated_fixation: pos = [0, 0]
+21.2966 	EXP 	rotated_fixation: opacity = 0
+21.2966 	EXP 	rotated_enclosing_1: autoDraw = True
+21.2966 	EXP 	rotated_enclosing: autoDraw = True
+21.2966 	EXP 	rotated_fixation: autoDraw = True
+21.2970 	EXP 	window1: mouseVisible = False
+21.3204 	EXP 	rotated_fixation: opacity = 0
+21.3207 	EXP 	window1: mouseVisible = False
+21.3333 	EXP 	rotated_fixation: opacity = 0
+21.3337 	EXP 	window1: mouseVisible = False
+21.3512 	EXP 	rotated_fixation: opacity = 0
+21.3516 	EXP 	window1: mouseVisible = False
+21.3692 	EXP 	rotated_fixation: opacity = 0
+21.3697 	EXP 	window1: mouseVisible = False
+21.3903 	EXP 	rotated_fixation: opacity = 0
+21.3905 	EXP 	window1: mouseVisible = False
+21.4029 	EXP 	rotated_fixation: opacity = 0
+21.4032 	EXP 	window1: mouseVisible = False
+21.4246 	EXP 	rotated_fixation: opacity = 0
+21.4251 	EXP 	window1: mouseVisible = False
+21.4264 	DATA 	Mouse:  Left button up, pos=(794,632)
+21.4372 	EXP 	rotated_fixation: opacity = 1
+21.4372 	EXP 	rotated_fixation: pos = [0, 0]
+21.4373 	EXP 	window1: mouseVisible = False
+21.4514 	EXP 	rotated_fixation: opacity = 1
+21.4514 	EXP 	rotated_fixation: pos = [0, 0]
+21.4516 	EXP 	window1: mouseVisible = False
+21.4655 	EXP 	rotated_fixation: opacity = 1
+21.4655 	EXP 	rotated_fixation: pos = [0, 0]
+21.4658 	EXP 	window1: mouseVisible = False
+21.4820 	EXP 	rotated_fixation: opacity = 1
+21.4820 	EXP 	rotated_fixation: pos = [0, 0]
+21.4825 	EXP 	window1: mouseVisible = False
+21.5025 	EXP 	rotated_fixation: opacity = 1
+21.5025 	EXP 	rotated_fixation: pos = [0, 0]
+21.5027 	EXP 	window1: mouseVisible = False
+21.5217 	EXP 	rotated_fixation: opacity = 1
+21.5217 	EXP 	rotated_fixation: pos = [0, 0]
+21.5222 	EXP 	window1: mouseVisible = False
+21.5359 	EXP 	rotated_fixation: opacity = 1
+21.5359 	EXP 	rotated_fixation: pos = [0, 0]
+21.5363 	EXP 	window1: mouseVisible = False
+21.5532 	EXP 	rotated_fixation: opacity = 1
+21.5532 	EXP 	rotated_fixation: pos = [0, 0]
+21.5534 	EXP 	window1: mouseVisible = False
+21.5667 	EXP 	rotated_fixation: opacity = 1
+21.5667 	EXP 	rotated_fixation: pos = [0, 0]
+21.5674 	EXP 	window1: mouseVisible = False
+21.5873 	EXP 	rotated_fixation: opacity = 1
+21.5873 	EXP 	rotated_fixation: pos = [0, 0]
+21.5878 	EXP 	window1: mouseVisible = False
+21.5995 	EXP 	rotated_fixation: opacity = 1
+21.5995 	EXP 	rotated_fixation: pos = [0, 0]
+21.6000 	EXP 	window1: mouseVisible = False
+21.6219 	EXP 	rotated_fixation: opacity = 1
+21.6219 	EXP 	rotated_fixation: pos = [0, 0]
+21.6224 	EXP 	window1: mouseVisible = False
+21.6441 	EXP 	rotated_fixation: opacity = 1
+21.6441 	EXP 	rotated_fixation: pos = [0, 0]
+21.6446 	EXP 	window1: mouseVisible = False
+21.6540 	EXP 	rotated_fixation: opacity = 1
+21.6540 	EXP 	rotated_fixation: pos = [0, 0]
+21.6543 	EXP 	window1: mouseVisible = False
+21.6673 	EXP 	rotated_fixation: opacity = 1
+21.6673 	EXP 	rotated_fixation: pos = [0, 0]
+21.6678 	EXP 	window1: mouseVisible = False
+21.6836 	EXP 	rotated_fixation: opacity = 1
+21.6836 	EXP 	rotated_fixation: pos = [0, 0]
+21.6841 	EXP 	window1: mouseVisible = False
+21.6988 	EXP 	rotated_fixation: opacity = 1
+21.6988 	EXP 	rotated_fixation: pos = [0, 0]
+21.6992 	EXP 	window1: mouseVisible = False
+21.7166 	EXP 	rotated_fixation: opacity = 1
+21.7166 	EXP 	rotated_fixation: pos = [0, 0]
+21.7172 	EXP 	window1: mouseVisible = False
+21.7351 	EXP 	rotated_fixation: opacity = 1
+21.7351 	EXP 	rotated_fixation: pos = [0, 0]
+21.7354 	EXP 	window1: mouseVisible = False
+21.7540 	EXP 	rotated_fixation: opacity = 1
+21.7540 	EXP 	rotated_fixation: pos = [0, 0]
+21.7547 	EXP 	window1: mouseVisible = False
+21.7760 	EXP 	rotated_fixation: opacity = 1
+21.7760 	EXP 	rotated_fixation: pos = [0, 0]
+21.7769 	EXP 	window1: mouseVisible = False
+21.7850 	EXP 	rotated_fixation: opacity = 1
+21.7850 	EXP 	rotated_fixation: pos = [0, 0]
+21.7854 	EXP 	window1: mouseVisible = False
+21.7999 	EXP 	rotated_fixation: opacity = 1
+21.7999 	EXP 	rotated_fixation: pos = [0, 0]
+21.8004 	EXP 	window1: mouseVisible = False
+21.8185 	EXP 	rotated_fixation: opacity = 1
+21.8185 	EXP 	rotated_fixation: pos = [0, 0]
+21.8192 	EXP 	window1: mouseVisible = False
+21.8353 	EXP 	rotated_fixation: opacity = 1
+21.8353 	EXP 	rotated_fixation: pos = [0, 0]
+21.8353 	EXP 	rotated_target: autoDraw = True
+21.8357 	EXP 	window1: mouseVisible = False
+21.8521 	EXP 	rotated_fixation: opacity = 1
+21.8521 	EXP 	rotated_fixation: pos = [0, 0]
+21.8528 	EXP 	window1: mouseVisible = False
+21.8726 	EXP 	rotated_fixation: opacity = 1
+21.8726 	EXP 	rotated_fixation: pos = [0, 0]
+21.8729 	EXP 	window1: mouseVisible = False
+21.8989 	EXP 	rotated_fixation: opacity = 1
+21.8989 	EXP 	rotated_fixation: pos = [0, 0]
+21.8990 	EXP 	window1: mouseVisible = False
+21.9051 	EXP 	rotated_fixation: opacity = 1
+21.9051 	EXP 	rotated_fixation: pos = [0, 0]
+21.9052 	EXP 	window1: mouseVisible = False
+21.9158 	EXP 	rotated_fixation: opacity = 1
+21.9158 	EXP 	rotated_fixation: pos = [0, 0]
+21.9161 	EXP 	window1: mouseVisible = False
+21.9316 	EXP 	rotated_fixation: opacity = 1
+21.9316 	EXP 	rotated_fixation: pos = [0, 0]
+21.9319 	EXP 	window1: mouseVisible = False
+21.9499 	EXP 	rotated_fixation: opacity = 1
+21.9499 	EXP 	rotated_fixation: pos = [0, 0]
+21.9505 	EXP 	window1: mouseVisible = False
+21.9687 	EXP 	rotated_fixation: opacity = 1
+21.9687 	EXP 	rotated_fixation: pos = [0, 0]
+21.9693 	EXP 	window1: mouseVisible = False
+21.9954 	EXP 	rotated_fixation: opacity = 1
+21.9954 	EXP 	rotated_fixation: pos = [0, 0]
+21.9956 	EXP 	window1: mouseVisible = False
+22.0062 	EXP 	rotated_fixation: opacity = 1
+22.0062 	EXP 	rotated_fixation: pos = [0, 0]
+22.0067 	EXP 	window1: mouseVisible = False
+22.0295 	EXP 	rotated_fixation: opacity = 1
+22.0295 	EXP 	rotated_fixation: pos = [0, 0]
+22.0299 	EXP 	window1: mouseVisible = False
+22.0502 	EXP 	rotated_fixation: opacity = 1
+22.0502 	EXP 	rotated_fixation: pos = [0, 0]
+22.0506 	EXP 	window1: mouseVisible = False
+22.0681 	EXP 	rotated_fixation: opacity = 1
+22.0681 	EXP 	rotated_fixation: pos = [0, 0]
+22.0684 	EXP 	window1: mouseVisible = False
+22.0835 	EXP 	rotated_fixation: opacity = 1
+22.0835 	EXP 	rotated_fixation: pos = [0, 0]
+22.0842 	EXP 	window1: mouseVisible = False
+22.0998 	EXP 	rotated_fixation: opacity = 1
+22.0998 	EXP 	rotated_fixation: pos = [0, 0]
+22.0999 	EXP 	window1: mouseVisible = False
+22.1146 	EXP 	rotated_fixation: opacity = 1
+22.1146 	EXP 	rotated_fixation: pos = [0, 0]
+22.1151 	EXP 	window1: mouseVisible = False
+22.1320 	EXP 	rotated_fixation: opacity = 1
+22.1320 	EXP 	rotated_fixation: pos = [0, 0]
+22.1324 	EXP 	window1: mouseVisible = False
+22.1502 	EXP 	rotated_fixation: opacity = 1
+22.1502 	EXP 	rotated_fixation: pos = [0, 0]
+22.1510 	EXP 	window1: mouseVisible = False
+22.1697 	EXP 	rotated_fixation: opacity = 1
+22.1697 	EXP 	rotated_fixation: pos = [0, 0]
+22.1700 	EXP 	window1: mouseVisible = False
+22.1835 	EXP 	rotated_fixation: opacity = 1
+22.1835 	EXP 	rotated_fixation: pos = [0, 0]
+22.1838 	EXP 	window1: mouseVisible = False
+22.1978 	EXP 	rotated_fixation: opacity = 1
+22.1978 	EXP 	rotated_fixation: pos = [0, 0]
+22.1981 	EXP 	window1: mouseVisible = False
+22.2196 	EXP 	rotated_fixation: opacity = 1
+22.2196 	EXP 	rotated_fixation: pos = [0, 0]
+22.2199 	EXP 	window1: mouseVisible = False
+22.2344 	EXP 	rotated_fixation: opacity = 1
+22.2344 	EXP 	rotated_fixation: pos = [0, 0]
+22.2347 	EXP 	window1: mouseVisible = False
+22.2510 	EXP 	rotated_fixation: opacity = 1
+22.2510 	EXP 	rotated_fixation: pos = [0, 0]
+22.2513 	EXP 	window1: mouseVisible = False
+22.2643 	EXP 	rotated_fixation: opacity = 1
+22.2643 	EXP 	rotated_fixation: pos = [0, 0]
+22.2647 	EXP 	window1: mouseVisible = False
+22.2817 	EXP 	rotated_fixation: opacity = 1
+22.2817 	EXP 	rotated_fixation: pos = [0, 0]
+22.2821 	EXP 	window1: mouseVisible = False
+22.3004 	EXP 	rotated_fixation: opacity = 1
+22.3004 	EXP 	rotated_fixation: pos = [0, 0]
+22.3007 	EXP 	window1: mouseVisible = False
+22.3187 	EXP 	rotated_fixation: opacity = 1
+22.3187 	EXP 	rotated_fixation: pos = [0, 0]
+22.3192 	EXP 	window1: mouseVisible = False
+22.3357 	EXP 	rotated_fixation: opacity = 1
+22.3357 	EXP 	rotated_fixation: pos = [0, 0]
+22.3361 	EXP 	window1: mouseVisible = False
+22.3499 	EXP 	rotated_fixation: opacity = 1
+22.3499 	EXP 	rotated_fixation: pos = [0, 0]
+22.3502 	EXP 	window1: mouseVisible = False
+22.3668 	EXP 	rotated_fixation: opacity = 1
+22.3668 	EXP 	rotated_fixation: pos = [0, 0]
+22.3674 	EXP 	window1: mouseVisible = False
+22.3830 	EXP 	rotated_fixation: opacity = 1
+22.3830 	EXP 	rotated_fixation: pos = [0, 0]
+22.3833 	EXP 	window1: mouseVisible = False
+22.3999 	EXP 	rotated_fixation: opacity = 1
+22.3999 	EXP 	rotated_fixation: pos = [0, 0]
+22.4004 	EXP 	window1: mouseVisible = False
+22.4201 	EXP 	rotated_fixation: opacity = 1
+22.4201 	EXP 	rotated_fixation: pos = [0, 0]
+22.4205 	EXP 	window1: mouseVisible = False
+22.4348 	EXP 	rotated_fixation: opacity = 1
+22.4348 	EXP 	rotated_fixation: pos = [0, 0]
+22.4352 	EXP 	window1: mouseVisible = False
+22.4512 	EXP 	rotated_fixation: opacity = 1
+22.4512 	EXP 	rotated_fixation: pos = [0, 0]
+22.4515 	EXP 	window1: mouseVisible = False
+22.4642 	EXP 	rotated_fixation: opacity = 1
+22.4642 	EXP 	rotated_fixation: pos = [0, 0]
+22.4645 	EXP 	window1: mouseVisible = False
+22.4810 	EXP 	rotated_fixation: opacity = 1
+22.4810 	EXP 	rotated_fixation: pos = [0, 0]
+22.4815 	EXP 	window1: mouseVisible = False
+22.5002 	EXP 	rotated_fixation: opacity = 1
+22.5002 	EXP 	rotated_fixation: pos = [0, 0]
+22.5005 	EXP 	window1: mouseVisible = False
+22.5178 	EXP 	rotated_fixation: opacity = 1
+22.5178 	EXP 	rotated_fixation: pos = [0, 0]
+22.5184 	EXP 	window1: mouseVisible = False
+22.5423 	EXP 	rotated_fixation: opacity = 1
+22.5423 	EXP 	rotated_fixation: pos = [0, 0]
+22.5428 	EXP 	window1: mouseVisible = False
+22.5529 	EXP 	rotated_fixation: opacity = 1
+22.5529 	EXP 	rotated_fixation: pos = [0, 0]
+22.5533 	EXP 	window1: mouseVisible = False
+22.5685 	EXP 	rotated_fixation: opacity = 1
+22.5685 	EXP 	rotated_fixation: pos = [0, 0]
+22.5690 	EXP 	window1: mouseVisible = False
+22.5812 	EXP 	rotated_fixation: opacity = 1
+22.5812 	EXP 	rotated_fixation: pos = [0, 0]
+22.5814 	EXP 	window1: mouseVisible = False
+22.5988 	EXP 	rotated_fixation: opacity = 1
+22.5988 	EXP 	rotated_fixation: pos = [0, 0]
+22.5997 	EXP 	window1: mouseVisible = False
+22.6009 	DATA 	Mouse: Left button down, pos=(960,540)
+22.6166 	EXP 	rotated_fixation: opacity = 0
+22.6168 	EXP 	window1: mouseVisible = False
+22.6343 	EXP 	rotated_fixation: opacity = 0
+22.6347 	EXP 	window1: mouseVisible = False
+22.6532 	EXP 	rotated_fixation: opacity = 0
+22.6540 	EXP 	window1: mouseVisible = False
+22.6681 	EXP 	rotated_fixation: opacity = 0
+22.6685 	EXP 	window1: mouseVisible = False
+22.6811 	EXP 	rotated_fixation: opacity = 0
+22.6815 	EXP 	window1: mouseVisible = False
+22.6980 	EXP 	rotated_fixation: opacity = 0
+22.6983 	EXP 	window1: mouseVisible = False
+22.7140 	EXP 	rotated_fixation: opacity = 0
+22.7144 	EXP 	window1: mouseVisible = False
+22.7308 	EXP 	rotated_fixation: opacity = 0
+22.7310 	EXP 	window1: mouseVisible = False
+22.7474 	EXP 	rotated_fixation: opacity = 0
+22.7477 	EXP 	window1: mouseVisible = False
+22.7704 	EXP 	rotated_fixation: opacity = 0
+22.7708 	EXP 	window1: mouseVisible = False
+22.7930 	EXP 	rotated_fixation: opacity = 0
+22.7936 	EXP 	window1: mouseVisible = False
+22.8030 	EXP 	rotated_fixation: opacity = 0
+22.8034 	EXP 	window1: mouseVisible = False
+22.8214 	EXP 	rotated_fixation: opacity = 0
+22.8218 	EXP 	window1: mouseVisible = False
+22.8331 	EXP 	rotated_fixation: opacity = 0
+22.8333 	EXP 	window1: mouseVisible = False
+22.8492 	EXP 	rotated_fixation: opacity = 0
+22.8500 	EXP 	window1: mouseVisible = False
+22.8668 	EXP 	rotated_fixation: opacity = 0
+22.8675 	EXP 	window1: mouseVisible = False
+22.8870 	EXP 	rotated_fixation: opacity = 0
+22.8874 	EXP 	window1: mouseVisible = False
+22.9016 	EXP 	rotated_fixation: opacity = 0
+22.9022 	EXP 	window1: mouseVisible = False
+22.9177 	EXP 	rotated_fixation: opacity = 0
+22.9180 	EXP 	window1: mouseVisible = False
+22.9319 	EXP 	rotated_fixation: opacity = 0
+22.9326 	EXP 	window1: mouseVisible = False
+22.9481 	EXP 	rotated_fixation: opacity = 0
+22.9487 	EXP 	window1: mouseVisible = False
+22.9671 	EXP 	rotated_fixation: opacity = 0
+22.9677 	EXP 	window1: mouseVisible = False
+22.9881 	EXP 	rotated_fixation: opacity = 0
+22.9883 	EXP 	window1: mouseVisible = False
+22.9995 	EXP 	rotated_fixation: opacity = 0
+23.0000 	EXP 	window1: mouseVisible = False
+23.0159 	EXP 	rotated_fixation: opacity = 0
+23.0165 	EXP 	window1: mouseVisible = False
+23.0336 	EXP 	rotated_fixation: opacity = 0
+23.0341 	EXP 	window1: mouseVisible = False
+23.0518 	EXP 	rotated_fixation: opacity = 0
+23.0524 	EXP 	window1: mouseVisible = False
+23.0653 	EXP 	rotated_fixation: opacity = 0
+23.0656 	EXP 	window1: mouseVisible = False
+23.0801 	EXP 	rotated_fixation: opacity = 0
+23.0805 	EXP 	window1: mouseVisible = False
+23.1000 	EXP 	rotated_fixation: opacity = 0
+23.1002 	EXP 	window1: mouseVisible = False
+23.1175 	EXP 	rotated_fixation: opacity = 0
+23.1181 	EXP 	window1: mouseVisible = False
+23.1325 	EXP 	rotated_fixation: opacity = 0
+23.1329 	EXP 	window1: mouseVisible = False
+23.1486 	EXP 	rotated_fixation: opacity = 0
+23.1491 	EXP 	window1: mouseVisible = False
+23.1645 	EXP 	rotated_fixation: opacity = 0
+23.1652 	EXP 	window1: mouseVisible = False
+23.2259 	EXP 	window1: mouseVisible = True
