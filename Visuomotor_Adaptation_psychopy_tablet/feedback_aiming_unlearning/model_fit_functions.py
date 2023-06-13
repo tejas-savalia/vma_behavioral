@@ -71,12 +71,12 @@ def calc_log_likelihood(params, data, model, p_type):
 
 ############ Fitting Functions
 #Load Data
-data = pd.read_csv('learning_curvature_errors.csv')
+data = pd.read_csv('learning_10pcutoff_errors.csv')
 
 
 def fit_single(participant):
     try:
-        errors = data.loc[data['p_id'] == participant, 'errors'].values*np.pi/180
+        errors = data.loc[data['p_id'] == participant, 'errors'].values#*np.pi/180
         p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
         curr_fitval = np.inf
         possible_starting_points = itertools.product(np.linspace(0, 1, 8), np.linspace(0, 1, 8), np.linspace(0, 1, 8))
@@ -92,7 +92,7 @@ def fit_single(participant):
     return participant, res.fun, res.x[0], res.x[1], res.x[2]
 
 #load single fits to use as slow learning starting points.
-single_fits = pd.read_csv('single_fit_results.csv').drop('Unnamed: 0', axis = 1).reset_index().drop('index', axis = 1)
+single_fits = pd.read_csv('single_fit_10pcutofferror_results.csv').drop('Unnamed: 0', axis = 1).reset_index().drop('index', axis = 1)
 
 def fit_dual(participant):
     try:
@@ -119,10 +119,12 @@ def fit_dual(participant):
 if __name__ == '__main__':
     participant = data['p_id'].unique()
     # participant = [641, 642]
-    pool = mp.Pool(6)
-    single_fit_results = pool.map(fit_single, participant)
-    # dual_fit_results = pool.map(fit_dual, participant)
+    pool = mp.Pool()
+    # single_fit_results = pool.map(fit_single, participant)
+    dual_fit_results = pool.map(fit_dual, participant)
     
+    # df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
     df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
-    df.to_csv('dual_fit_results.csv')
+
+    df.to_csv('dual_fit_10pcutofferror_results.csv')
     print(df)
