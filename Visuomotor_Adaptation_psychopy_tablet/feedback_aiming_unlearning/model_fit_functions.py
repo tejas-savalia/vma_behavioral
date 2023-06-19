@@ -1,7 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns
 import scipy.stats as stat
 from scipy.optimize import minimize
 import itertools
