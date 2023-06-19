@@ -1,0 +1,13 @@
+prefix=c:/Users/tejas/Documents/vma_behavioral/Visuomotor_Adaptation_psychopy_tablet/feedback_aiming_unlearning/.conda/Library
+exec_prefix=c:/Users/tejas/Documents/vma_behavioral/Visuomotor_Adaptation_psychopy_tablet/feedback_aiming_unlearning/.conda/Library
+libdir=c:/Users/tejas/Documents/vma_behavioral/Visuomotor_Adaptation_psychopy_tablet/feedback_aiming_unlearning/.conda/Library/lib
+sharedlibdir=c:/Users/tejas/Documents/vma_behavioral/Visuomotor_Adaptation_psychopy_tablet/feedback_aiming_unlearning/.conda/Library/lib
+includedir=c:/Users/tejas/Documents/vma_behavioral/Visuomotor_Adaptation_psychopy_tablet/feedback_aiming_unlearning/.conda/Library/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.13
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}
