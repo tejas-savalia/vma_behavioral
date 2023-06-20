@@ -9,8 +9,13 @@ def single_state_model(A, B, num_trials, p_type):
     rotation_estimate = np.zeros(num_trials)
     error = np.zeros(num_trials)
     if p_type == 'Sudden':
-        rotation = np.pi/3
+        # rotation = np.pi/3
         for trial in range(1, num_trials):
+            if trial in range(64*7 - 1, 64*8 - 1):
+                rotation = -np.pi/3
+            else:
+                rotation = np.pi/3
+
             error[trial-1] = rotation - rotation_estimate[trial-1]
             rotation_estimate[trial] = A*rotation_estimate[trial-1] + B*error[trial-1]
     else:
@@ -21,6 +26,12 @@ def single_state_model(A, B, num_trials, p_type):
             if trial%64 == 0:
                 if rotation < np.pi/3:
                     rotation = rotation + np.pi/18
+                else:
+                    rotation = np.pi/3
+
+            if trial in range(64*7 - 1, 64*8 - 1):
+                rotation = -np.pi/3
+
     error[trial] = rotation - rotation_estimate[trial]
     return error
 
@@ -31,9 +42,15 @@ def dual_state_model(As, Bs, Af, Bf, num_trials, p_type):
     
     error = np.zeros(num_trials)
     if p_type == 'Sudden':
-        rotation = np.pi/3
+        # rotation = np.pi/3
 
         for trial in range(1, num_trials):
+
+            if trial in range(64*7 - 1, 64*8 - 1):
+                rotation = -np.pi/3
+            else:
+                rotation = np.pi/3
+
             error[trial-1] = rotation - rotation_estimate[trial-1]
             fast_estimate[trial] = Af*fast_estimate[trial-1] + Bf*error[trial-1]
             slow_estimate[trial] = As*slow_estimate[trial-1] + Bs*error[trial-1]
@@ -42,6 +59,8 @@ def dual_state_model(As, Bs, Af, Bf, num_trials, p_type):
     else:
         rotation = np.pi/18
         for trial in range(1, num_trials):
+
+
             error[trial-1] = rotation - rotation_estimate[trial-1]
             fast_estimate[trial] = Af*fast_estimate[trial-1] + Bf*error[trial-1]
             slow_estimate[trial] = As*slow_estimate[trial-1] + Bs*error[trial-1]
@@ -50,6 +69,12 @@ def dual_state_model(As, Bs, Af, Bf, num_trials, p_type):
             if trial%64 == 0:
                 if rotation < np.pi/3:
                     rotation = rotation + np.pi/18
+                else:
+                    rotation = np.pi/3
+
+            if trial in range(64*7 - 1, 64*8 - 1):
+                rotation = -np.pi/3
+
     error[trial] = rotation - rotation_estimate[trial-1]
 
     return error
@@ -69,12 +94,12 @@ def calc_log_likelihood(params, data, model, p_type):
 
 ############ Fitting Functions
 #Load Data
-data = pd.read_csv('learning_10pcutoff_errors.csv')
+data = pd.read_csv('df_allphases.csv')
 
 
 def fit_single(participant):
     try:
-        errors = data.loc[data['p_id'] == participant, 'errors'].values#*np.pi/180
+        errors = data.loc[data['p_id'] == participant, 'avg errors'].values#*np.pi/180
         p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
         curr_fitval = np.inf
         possible_starting_points = itertools.product(np.linspace(0, 1, 8), np.linspace(0, 1, 8), np.linspace(0, 1, 8))
@@ -90,11 +115,12 @@ def fit_single(participant):
     return participant, res.fun, res.x[0], res.x[1], res.x[2]
 
 #load single fits to use as slow learning starting points.
-single_fits = pd.read_csv('single_fit_10pcutofferror_results.csv').drop('Unnamed: 0', axis = 1).reset_index().drop('index', axis = 1)
 
 def fit_dual(participant):
+    single_fits = pd.read_csv('single_fit_avgerror_results.csv')
+
     try:
-        errors = data.loc[data['p_id'] == participant, 'errors'].values*np.pi/180
+        errors = data.loc[data['p_id'] == participant, 'avg errors'].values*np.pi/180
         p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
         As_init = single_fits.loc[single_fits['p_id'] == participant, 'A'].values[0]
         Bs_init = single_fits.loc[single_fits['p_id'] == participant, 'B'].values[0]
@@ -118,11 +144,12 @@ if __name__ == '__main__':
     participant = data['p_id'].unique()
     # participant = [641, 642]
     pool = mp.Pool()
-    # single_fit_results = pool.map(fit_single, participant)
-    dual_fit_results = pool.map(fit_dual, participant)
-    
-    # df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
-    df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
+    single_fit_results = pool.map(fit_single, participant)
+    df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
+    df.to_csv('model_results/single_fit_avgerror_results.csv')
+    print(df)
 
-    df.to_csv('dual_fit_10pcutofferror_results.csv')
+    dual_fit_results = pool.map(fit_dual, participant)
+    df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
+    df.to_csv('model_results/dual_fit_avgerror_results.csv')
     print(df)
