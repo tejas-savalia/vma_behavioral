@@ -117,7 +117,7 @@ def fit_single(participant):
 #load single fits to use as slow learning starting points.
 
 def fit_dual(participant):
-    single_fits = pd.read_csv('single_fit_avgerror_results.csv')
+    single_fits = pd.read_csv('model_results/single_fit_avgerror_results.csv')
 
     try:
         errors = data.loc[data['p_id'] == participant, 'avg errors'].values*np.pi/180
