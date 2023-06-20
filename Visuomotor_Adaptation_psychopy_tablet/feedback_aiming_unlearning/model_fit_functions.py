@@ -98,8 +98,10 @@ data = pd.read_csv('df_allphases.csv')
 
 
 def fit_single(participant):
+    print('participant started: ', participant)
+
     try:
-        errors = data.loc[data['p_id'] == participant, 'avg errors'].values#*np.pi/180
+        errors = data.loc[data['p_id'] == participant, 'avg errors'].values
         p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
         curr_fitval = np.inf
         possible_starting_points = itertools.product(np.linspace(0, 1, 8), np.linspace(0, 1, 8), np.linspace(0, 1, 8))
@@ -118,9 +120,10 @@ def fit_single(participant):
 
 def fit_dual(participant):
     single_fits = pd.read_csv('model_results/single_fit_avgerror_results.csv')
+    print('participant started: ', participant)
 
     try:
-        errors = data.loc[data['p_id'] == participant, 'avg errors'].values*np.pi/180
+        errors = data.loc[data['p_id'] == participant, 'avg errors'].values
         p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
         As_init = single_fits.loc[single_fits['p_id'] == participant, 'A'].values[0]
         Bs_init = single_fits.loc[single_fits['p_id'] == participant, 'B'].values[0]
