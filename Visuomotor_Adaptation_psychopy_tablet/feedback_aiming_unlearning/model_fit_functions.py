@@ -154,7 +154,7 @@ single_fits = pd.read_csv('model_results/single_fit_initerror_results.csv')
 dual_fits = pd.read_csv('model_results/dual_fit_initerror_results.csv')
 
 def fit_single_cv(participant):
-    print('participant started: ', participant)
+    # print('participant started: ', participant)
 
     errors = data.loc[data['p_id'] == participant, 'init errors'].values
     p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
@@ -163,7 +163,7 @@ def fit_single_cv(participant):
     test_indices = np.sort(np.delete(np.arange(len(errors)), train_indices)) 
     res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'single state', p_type, 'cv', train_indices), bounds=((0, 1), (0, 1), (0, 1)), method = 'Nelder-Mead')
     test_gof = calc_log_likelihood(res.x, errors, 'single state', p_type, 'cv', test_indices)
-    print('participant done: ', participant)
+    # print('participant done: ', participant)
     # except:
     #     print('participant failed: ', participant)
     #     return participant, np.nan, np.nan, np.nan, np.nan, np.nan
@@ -172,8 +172,7 @@ def fit_single_cv(participant):
 #load single fits to use as slow learning starting points.
 
 def fit_dual_cv(participant):
-    single_fits = pd.read_csv('model_results/single_fit_initerror_results.csv')
-    print('participant started: ', participant)
+    # print('participant started: ', participant)
 
     # try:
     errors = data.loc[data['p_id'] == participant, 'init errors'].values
@@ -183,7 +182,7 @@ def fit_dual_cv(participant):
     test_indices = np.sort(np.delete(np.arange(len(errors)), train_indices)) 
     res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'dual state', p_type, 'cv', train_indices), bounds=((0, 1), (0, 1), (0, 1), (0, 1), (0, 1)), method = 'Nelder-Mead')
     test_gof = calc_log_likelihood(res.x, errors, 'dual state', p_type, 'cv', test_indices)
-    print('participant done: ', participant)
+    # print('participant done: ', participant)
     # except:
     #     print('participant failed: ', participant)
         # return participant, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan
@@ -201,10 +200,12 @@ if __name__ == '__main__':
     # df.to_csv('model_results/single_fit_initerror_results_cv.csv')
     df = []
     for i in range(100):
-        single_fit_results = pool.map(fit_single, participant)
+        single_fit_results = pool.map(fit_single_cv, participant)
         temp_df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'test gof', 'A', 'B', 'Eps'])
         temp_df['cv itr'] = i
         df.append(temp_df)
+        print('cv iteration done: ', i)
+
     df_full = pd.concat(df)
     df_full.to_csv('model_results/single_fit_initerror_results_cv.csv')
 
@@ -219,6 +220,7 @@ if __name__ == '__main__':
         temp_df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'test gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
         temp_df['cv itr'] = i
         df.append(temp_df)
+        print('cv iteration done: ', i)
     df_full = pd.concat(df)
     df_full.to_csv('model_results/dual_fit_initerror_results_cv.csv')
 
