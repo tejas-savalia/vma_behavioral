@@ -150,8 +150,8 @@ def fit_dual(participant):
     return participant, res.fun, res.x[0], res.x[1], res.x[2], res.x[3], res.x[4]
 
 
-single_fits = pd.read_csv('model_results/single_fit_initerror_results.csv')
-dual_fits = pd.read_csv('model_results/dual_fit_initerror_results.csv')
+single_fits = pd.read_csv('model_results/single_fit_avgerror_results.csv')
+dual_fits = pd.read_csv('model_results/dual_fit_avgerror_results.csv')
 
 def fit_single_cv(participant):
     # print('participant started: ', participant)
@@ -207,7 +207,7 @@ if __name__ == '__main__':
         print('cv iteration done: ', i)
 
     df_full = pd.concat(df)
-    df_full.to_csv('model_results/single_fit_initerror_results_cv.csv')
+    df_full.to_csv('model_results/single_fit_avgerror_results_cv.csv')
 
     print(df)
 
@@ -222,7 +222,7 @@ if __name__ == '__main__':
         df.append(temp_df)
         print('cv iteration done: ', i)
     df_full = pd.concat(df)
-    df_full.to_csv('model_results/dual_fit_initerror_results_cv.csv')
+    df_full.to_csv('model_results/dual_fit_avgerror_results_cv.csv')
 
 
     print(df)
