@@ -153,14 +153,10 @@ def fit_dual(participant):
 single_fits = pd.read_csv('model_results/single_fit_avgerror_results.csv')
 dual_fits = pd.read_csv('model_results/dual_fit_avgerror_results.csv')
 
-def fit_single_cv(participant):
+def fit_single_cv(participant, errors, p_type, train_indices, test_indices):
     # print('participant started: ', participant)
 
-    errors = data.loc[data['p_id'] == participant, 'init errors'].values
-    p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
     starting_point = single_fits.loc[single_fits['p_id'] == participant, ['A', 'B', 'Eps']].values.tolist()       
-    train_indices = np.sort(np.random.choice(np.arange(len(errors)), int(0.9*len(errors)), replace = False))
-    test_indices = np.sort(np.delete(np.arange(len(errors)), train_indices)) 
     res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'single state', p_type, 'cv', train_indices), bounds=((0, 1), (0, 1), (0, 1)), method = 'Nelder-Mead')
     test_gof = calc_log_likelihood(res.x, errors, 'single state', p_type, 'cv', test_indices)
     # print('participant done: ', participant)
@@ -171,15 +167,11 @@ def fit_single_cv(participant):
 
 #load single fits to use as slow learning starting points.
 
-def fit_dual_cv(participant):
+def fit_dual_cv(participant, errors, p_type, train_indices, test_indices):
     # print('participant started: ', participant)
 
     # try:
-    errors = data.loc[data['p_id'] == participant, 'init errors'].values
-    p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
     starting_point = dual_fits.loc[dual_fits['p_id'] == participant, ['As', 'Bs', 'Af', 'Bf', 'Eps']].values.tolist()       
-    train_indices = np.sort(np.random.choice(np.arange(len(errors)), int(0.9*len(errors)), replace = False))
-    test_indices = np.sort(np.delete(np.arange(len(errors)), train_indices)) 
     res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'dual state', p_type, 'cv', train_indices), bounds=((0, 1), (0, 1), (0, 1), (0, 1), (0, 1)), method = 'Nelder-Mead')
     test_gof = calc_log_likelihood(res.x, errors, 'dual state', p_type, 'cv', test_indices)
     # print('participant done: ', participant)
@@ -188,6 +180,17 @@ def fit_dual_cv(participant):
         # return participant, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan
     return participant, res.fun, test_gof, res.x[0], res.x[1], res.x[2], res.x[3], res.x[4]
 
+def fit_cv(participant):
+    errors = data.loc[data['p_id'] == participant, 'init errors'].values
+    p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
+    train_indices = np.sort(np.random.choice(np.arange(len(errors)), int(0.9*len(errors)), replace = False))
+    test_indices = np.sort(np.delete(np.arange(len(errors)), train_indices)) 
+    single_fit_res = fit_single_cv(participant, errors, p_type, train_indices, test_indices)
+    single_fit_res_df = pd.DataFrame(single_fit_res, columns =['p_id', 'gof', 'test gof', 'A', 'B', 'Eps'])
+    dual_fit_res = fit_dual_cv(participant, errors, p_type, train_indices, test_indices)
+    dual_fit_res_df = pd.DataFrame(dual_fit_res, columns =['p_id', 'gof', 'test gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
+
+    return single_fit_res_df, dual_fit_res_df
 
 
 if __name__ == '__main__':
@@ -198,32 +201,36 @@ if __name__ == '__main__':
     
     # df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'test gof', 'A', 'B', 'Eps'])
     # df.to_csv('model_results/single_fit_initerror_results_cv.csv')
-    df = []
+    single_fit_df = []
+    dual_fit_df = []
     for i in range(100):
-        single_fit_results = pool.map(fit_single_cv, participant)
-        temp_df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'test gof', 'A', 'B', 'Eps'])
-        temp_df['cv itr'] = i
-        df.append(temp_df)
+        single_fit_results, dual_fit_results = pool.map(fit_single_cv, participant)
+        single_fit_results['cv itr'] = i
+        single_fit_df.append(single_fit_results)
+        dual_fit_results['cv itr'] = i
+        dual_fit_df.append(dual_fit_results)
         print('cv iteration done: ', i)
 
-    df_full = pd.concat(df)
-    df_full.to_csv('model_results/single_fit_avgerror_results_cv.csv')
+    df_full_single = pd.concat(single_fit_df)
+    df_full_single.to_csv('model_results/single_fit_avgerror_results_cv.csv', index = False)
 
-    print(df)
+    df_full_dual = pd.concat(dual_fit_df)
+    df_full_dual.to_csv('model_results/dual_fit_avgerror_results_cv.csv', index=False)
+
 
     # dual_fit_results = pool.map(fit_dual, participant)
     # df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'test gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
     # df.to_csv('model_results/dual_fit_initerror_results_cv.csv')
-    df = []
-    for i in range(100):
-        dual_fit_results = pool.map(fit_dual_cv, participant)
-        temp_df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'test gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
-        temp_df['cv itr'] = i
-        df.append(temp_df)
-        print('cv iteration done: ', i)
-    df_full = pd.concat(df)
-    df_full.to_csv('model_results/dual_fit_avgerror_results_cv.csv')
+    # df = []
+    # for i in range(100):
+    #     dual_fit_results = pool.map(fit_dual_cv, participant)
+    #     temp_df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'test gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
+    #     temp_df['cv itr'] = i
+    #     df.append(temp_df)
+    #     print('cv iteration done: ', i)
+    # df_full = pd.concat(df)
+    # df_full.to_csv('model_results/dual_fit_avgerror_results_cv.csv')
 
 
-    print(df)
+    # print(df)
 
