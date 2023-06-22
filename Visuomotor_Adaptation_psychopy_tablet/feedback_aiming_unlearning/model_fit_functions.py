@@ -4,6 +4,9 @@ import scipy.stats as stat
 from scipy.optimize import minimize
 import itertools
 import multiprocessing as mp
+import warnings
+warnings.filterwarnings("ignore")
+
 
 def single_state_model(A, B, num_trials, p_type):
     rotation_estimate = np.zeros(num_trials)
@@ -163,7 +166,7 @@ def fit_single_cv(participant, errors, p_type, train_indices, test_indices):
     # except:
     #     print('participant failed: ', participant)
     #     return participant, np.nan, np.nan, np.nan, np.nan, np.nan
-    return participant, res.fun, test_gof, res.x[0], res.x[1], res.x[2]
+    return [participant, res.fun, test_gof, res.x[0], res.x[1], res.x[2]]
 
 #load single fits to use as slow learning starting points.
 
@@ -178,7 +181,7 @@ def fit_dual_cv(participant, errors, p_type, train_indices, test_indices):
     # except:
     #     print('participant failed: ', participant)
         # return participant, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan
-    return participant, res.fun, test_gof, res.x[0], res.x[1], res.x[2], res.x[3], res.x[4]
+    return [participant, res.fun, test_gof, res.x[0], res.x[1], res.x[2], res.x[3], res.x[4]]
 
 def fit_cv(participant):
     errors = data.loc[data['p_id'] == participant, 'init errors'].values
@@ -186,11 +189,8 @@ def fit_cv(participant):
     train_indices = np.sort(np.random.choice(np.arange(len(errors)), int(0.9*len(errors)), replace = False))
     test_indices = np.sort(np.delete(np.arange(len(errors)), train_indices)) 
     single_fit_res = fit_single_cv(participant, errors, p_type, train_indices, test_indices)
-    single_fit_res_df = pd.DataFrame(single_fit_res, columns =['p_id', 'gof', 'test gof', 'A', 'B', 'Eps'])
     dual_fit_res = fit_dual_cv(participant, errors, p_type, train_indices, test_indices)
-    dual_fit_res_df = pd.DataFrame(dual_fit_res, columns =['p_id', 'gof', 'test gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
-
-    return single_fit_res_df, dual_fit_res_df
+    return np.concatenate([single_fit_res, dual_fit_res])
 
 
 if __name__ == '__main__':
@@ -204,11 +204,17 @@ if __name__ == '__main__':
     single_fit_df = []
     dual_fit_df = []
     for i in range(100):
-        single_fit_results, dual_fit_results = pool.map(fit_single_cv, participant)
-        single_fit_results['cv itr'] = i
-        single_fit_df.append(single_fit_results)
-        dual_fit_results['cv itr'] = i
-        dual_fit_df.append(dual_fit_results)
+        # print(pool.map(fit_cv, participant))
+        res_ = np.array(pool.map(fit_cv, participant))
+        # print(res_)
+        # print(single_fit_results)
+        single_fit_res_df = pd.DataFrame(res_[:, :6], columns =['p_id', 'gof', 'test gof', 'A', 'B', 'Eps'])
+        dual_fit_res_df = pd.DataFrame(res_[:, 6:], columns =['p_id', 'gof', 'test gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
+
+        single_fit_res_df['cv itr'] = i
+        single_fit_df.append(single_fit_res_df)
+        dual_fit_res_df['cv itr'] = i
+        dual_fit_df.append(dual_fit_res_df)
         print('cv iteration done: ', i)
 
     df_full_single = pd.concat(single_fit_df)
