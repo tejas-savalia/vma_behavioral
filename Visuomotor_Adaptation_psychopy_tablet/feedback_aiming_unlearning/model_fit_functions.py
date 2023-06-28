@@ -153,8 +153,8 @@ def fit_dual(participant):
     return participant, res.fun, res.x[0], res.x[1], res.x[2], res.x[3], res.x[4]
 
 
-single_fits = pd.read_csv('model_results/single_fit_avgerror_results.csv')
-dual_fits = pd.read_csv('model_results/dual_fit_avgerror_results.csv')
+single_fits = pd.read_csv('model_results/single_fit_initerror_results.csv')
+dual_fits = pd.read_csv('model_results/dual_fit_initerror_results.csv')
 
 def fit_single_cv(participant, errors, p_type, train_indices, test_indices):
     # print('participant started: ', participant)
@@ -218,10 +218,10 @@ if __name__ == '__main__':
         print('cv iteration done: ', i)
 
     df_full_single = pd.concat(single_fit_df)
-    df_full_single.to_csv('model_results/single_fit_avgerror_results_cv.csv', index = False)
+    df_full_single.to_csv('model_results/single_fit_initerror_results_cv.csv', index = False)
 
     df_full_dual = pd.concat(dual_fit_df)
-    df_full_dual.to_csv('model_results/dual_fit_avgerror_results_cv.csv', index=False)
+    df_full_dual.to_csv('model_results/dual_fit_initerror_results_cv.csv', index=False)
 
 
     # dual_fit_results = pool.map(fit_dual, participant)
