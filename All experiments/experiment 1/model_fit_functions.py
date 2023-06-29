@@ -12,12 +12,12 @@ def single_state_model(A, B, num_trials, p_type):
     rotation_estimate = np.zeros(num_trials)
     error = np.zeros(num_trials)
     if p_type == 'Sudden':
-        # rotation = np.pi/3
+        rotation = np.pi/3
         for trial in range(1, num_trials):
-            if trial in range(64*7 - 1, 64*8 - 1):
-                rotation = -np.pi/3
-            else:
-                rotation = np.pi/3
+            # if trial in range(64*7 - 1, 64*8 - 1):
+            #     rotation = -np.pi/3
+            # else:
+            #     rotation = np.pi/3
 
             error[trial-1] = rotation - rotation_estimate[trial-1]
             rotation_estimate[trial] = A*rotation_estimate[trial-1] + B*error[trial-1]
@@ -27,13 +27,13 @@ def single_state_model(A, B, num_trials, p_type):
             error[trial-1] = rotation - rotation_estimate[trial-1]
             rotation_estimate[trial] = A*rotation_estimate[trial-1] + B*error[trial-1]
             if trial%64 == 0:
-                if rotation < np.pi/3:
+                if rotation < np.pi/2:
                     rotation = rotation + np.pi/18
                 else:
-                    rotation = np.pi/3
+                    rotation = np.pi/2
 
-            if trial in range(64*7 - 1, 64*8 - 1):
-                rotation = -np.pi/3
+            # if trial in range(64*7 - 1, 64*8 - 1):
+            #     rotation = -np.pi/3
 
     error[trial] = rotation - rotation_estimate[trial]
     return error
@@ -45,14 +45,14 @@ def dual_state_model(As, Bs, Af, Bf, num_trials, p_type):
     
     error = np.zeros(num_trials)
     if p_type == 'Sudden':
-        # rotation = np.pi/3
+        rotation = np.pi/3
 
         for trial in range(1, num_trials):
 
-            if trial in range(64*7 - 1, 64*8 - 1):
-                rotation = -np.pi/3
-            else:
-                rotation = np.pi/3
+            # if trial in range(64*7 - 1, 64*8 - 1):
+            #     rotation = -np.pi/3
+            # else:
+            #     rotation = np.pi/3
 
             error[trial-1] = rotation - rotation_estimate[trial-1]
             fast_estimate[trial] = Af*fast_estimate[trial-1] + Bf*error[trial-1]
@@ -70,13 +70,13 @@ def dual_state_model(As, Bs, Af, Bf, num_trials, p_type):
             rotation_estimate[trial] = fast_estimate[trial] + slow_estimate[trial]
 
             if trial%64 == 0:
-                if rotation < np.pi/3:
+                if rotation < np.pi/2:
                     rotation = rotation + np.pi/18
                 else:
-                    rotation = np.pi/3
+                    rotation = np.pi/2
 
-            if trial in range(64*7 - 1, 64*8 - 1):
-                rotation = -np.pi/3
+            # if trial in range(64*7 - 1, 64*8 - 1):
+            #     rotation = -np.pi/3
 
     error[trial] = rotation - rotation_estimate[trial-1]
 
@@ -153,11 +153,10 @@ def fit_dual(participant):
     return participant, res.fun, res.x[0], res.x[1], res.x[2], res.x[3], res.x[4]
 
 
-single_fits = pd.read_csv('model_results/single_fit_initerror_results.csv')
-dual_fits = pd.read_csv('model_results/dual_fit_initerror_results.csv')
 
 def fit_single_cv(participant, errors, p_type, train_indices, test_indices):
     # print('participant started: ', participant)
+    single_fits = pd.read_csv('model_results/single_fit_initerror_results.csv')
 
     starting_point = single_fits.loc[single_fits['p_id'] == participant, ['A', 'B', 'Eps']].values.tolist()       
     res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'single state', p_type, 'cv', train_indices), bounds=((0, 1), (0, 1), (0, 1)), method = 'Nelder-Mead')
@@ -171,6 +170,7 @@ def fit_single_cv(participant, errors, p_type, train_indices, test_indices):
 #load single fits to use as slow learning starting points.
 
 def fit_dual_cv(participant, errors, p_type, train_indices, test_indices):
+    dual_fits = pd.read_csv('model_results/dual_fit_initerror_results.csv')
     # print('participant started: ', participant)
 
     # try:
@@ -197,10 +197,14 @@ if __name__ == '__main__':
     participant = data['p_id'].unique()
     # participant = [641, 642]
     pool = mp.Pool()
-    # single_fit_results = pool.map(fit_single, participant)
-    
-    # df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'test gof', 'A', 'B', 'Eps'])
-    # df.to_csv('model_results/single_fit_initerror_results_cv.csv')
+    single_fit_results = pool.map(fit_single, participant)    
+    df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
+    df.to_csv('model_results/single_fit_initerror_results.csv')
+
+    dual_fit_results = pool.map(fit_dual, participant)    
+    df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
+    df.to_csv('model_results/dual_fit_initerror_results.csv')
+
     single_fit_df = []
     dual_fit_df = []
     for i in range(100):
