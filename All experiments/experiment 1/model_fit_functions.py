@@ -12,7 +12,7 @@ def single_state_model(A, B, num_trials, p_type):
     rotation_estimate = np.zeros(num_trials)
     error = np.zeros(num_trials)
     if p_type == 'Sudden':
-        rotation = np.pi/3
+        rotation = np.pi/2
         for trial in range(1, num_trials):
             # if trial in range(64*7 - 1, 64*8 - 1):
             #     rotation = -np.pi/3
@@ -45,7 +45,7 @@ def dual_state_model(As, Bs, Af, Bf, num_trials, p_type):
     
     error = np.zeros(num_trials)
     if p_type == 'Sudden':
-        rotation = np.pi/3
+        rotation = np.pi/2
 
         for trial in range(1, num_trials):
 
@@ -104,7 +104,7 @@ def calc_log_likelihood(params, data, model, p_type, fit_type = 'regular', train
 
 ############ Fitting Functions
 #Load Data
-data = pd.read_csv('df_allphases.csv')
+data = pd.read_csv('df_learn.csv')
 
 
 def fit_single(participant):
