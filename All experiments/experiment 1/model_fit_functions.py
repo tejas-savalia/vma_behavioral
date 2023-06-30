@@ -104,10 +104,11 @@ def calc_log_likelihood(params, data, model, p_type, fit_type = 'regular', train
 
 ############ Fitting Functions
 #Load Data
-data = pd.read_csv('df_learn.csv')
 
 
 def fit_single(participant):
+    data = pd.read_csv('df_learn.csv')
+
     print('participant started: ', participant)
 
     try:
@@ -130,6 +131,8 @@ def fit_single(participant):
 
 def fit_dual(participant):
     single_fits = pd.read_csv('model_results/single_fit_initerror_results.csv')
+    data = pd.read_csv('df_learn.csv')
+
     print('participant started: ', participant)
 
     try:
@@ -194,14 +197,24 @@ def fit_cv(participant):
 
 
 if __name__ == '__main__':
-    participant = data['p_id'].unique()
-    # participant = [641, 642]
+    data = pd.read_csv('df_learn.csv')
+
+    # participant = data['p_id'].unique()
+    participant = np.arange(60)
     pool = mp.Pool()
+    # single_fit_results = []
+    # for p in participant:
+    #     single_fit_results.append(fit_single(p))    
+
     single_fit_results = pool.map(fit_single, participant)    
     df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
     df.to_csv('model_results/single_fit_initerror_results.csv')
 
     dual_fit_results = pool.map(fit_dual, participant)    
+    # dual_fit_results = []
+    # for p in participant:
+    #     dual_fit_results.append(fit_dual(p))    
+
     df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
     df.to_csv('model_results/dual_fit_initerror_results.csv')
 
