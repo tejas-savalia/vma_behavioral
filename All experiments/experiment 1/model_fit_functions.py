@@ -13,6 +13,9 @@ def single_state_model(A, B, num_trials, p_type):
     error = np.zeros(num_trials)
     if p_type == 'Sudden':
         rotation = np.pi/2
+        if trial >= 640:
+            rotation = 0
+
         for trial in range(1, num_trials):
             # if trial in range(64*7 - 1, 64*8 - 1):
             #     rotation = -np.pi/3
@@ -31,6 +34,8 @@ def single_state_model(A, B, num_trials, p_type):
                     rotation = rotation + np.pi/18
                 else:
                     rotation = np.pi/2
+            if trial >= 640:
+                rotation = 0
 
             # if trial in range(64*7 - 1, 64*8 - 1):
             #     rotation = -np.pi/3
@@ -46,6 +51,8 @@ def dual_state_model(As, Bs, Af, Bf, num_trials, p_type):
     error = np.zeros(num_trials)
     if p_type == 'Sudden':
         rotation = np.pi/2
+        if trial >= 640:
+            rotation = 0
 
         for trial in range(1, num_trials):
 
@@ -74,6 +81,9 @@ def dual_state_model(As, Bs, Af, Bf, num_trials, p_type):
                     rotation = rotation + np.pi/18
                 else:
                     rotation = np.pi/2
+                    
+            if trial >= 640:
+                rotation = 0
 
             # if trial in range(64*7 - 1, 64*8 - 1):
             #     rotation = -np.pi/3
