@@ -117,7 +117,7 @@ def calc_log_likelihood(params, data, model, p_type, fit_type = 'regular', train
 
 
 def fit_single(participant):
-    data = pd.read_csv('df_learn.csv')
+    data = pd.read_csv('df_learn_signed.csv')
 
     print('participant started: ', participant)
 
@@ -143,7 +143,7 @@ def fit_single(participant):
 
 def fit_dual(participant):
     single_fits = pd.read_csv('model_results/single_fit_signed_initerror_results.csv')
-    data = pd.read_csv('df_learn.csv')
+    data = pd.read_csv('df_learn_signed.csv')
 
     print('participant started: ', participant)
 
@@ -199,7 +199,7 @@ def fit_dual_cv(participant, errors, p_type, train_indices, test_indices):
     return [participant, res.fun, test_gof, res.x[0], res.x[1], res.x[2], res.x[3], res.x[4]]
 
 def fit_cv(participant):
-    data = pd.read_csv('df_learn.csv')
+    data = pd.read_csv('df_learnwashout.csv')
 
     errors = data.loc[data['p_id'] == participant, 'init signed error'].values
     p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
