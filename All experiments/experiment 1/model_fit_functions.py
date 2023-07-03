@@ -98,7 +98,7 @@ def calc_log_likelihood(params, data, model, p_type, fit_type = 'regular', train
             return np.inf
         model_pred = single_state_model(params[0], params[1], len(data), p_type)
     else:
-        if any(params) < 0 or any(params) > 1 or params[0] < params[2] or params[1] > params[3]:
+        if any(params) < 0 or any(params) > 1 or params[0] <= params[2] or params[1] >= params[3]:
             return np.inf        
         model_pred = dual_state_model(params[0], params[1], params[2], params[3], len(data), p_type)
 
@@ -199,7 +199,7 @@ def fit_dual_cv(participant, errors, p_type, train_indices, test_indices):
     return [participant, res.fun, test_gof, res.x[0], res.x[1], res.x[2], res.x[3], res.x[4]]
 
 def fit_cv(participant):
-    data = pd.read_csv('df_learnwashout.csv')
+    data = pd.read_csv('df_learn_signed.csv')
 
     errors = data.loc[data['p_id'] == participant, 'init signed error'].values
     p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
@@ -224,13 +224,13 @@ if __name__ == '__main__':
     # df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
     # df.to_csv('model_results/single_fit_signed_initerror_results.csv')
 
-    dual_fit_results = pool.map(fit_dual, participant)    
+    # dual_fit_results = pool.map(fit_dual, participant)    
     # dual_fit_results = []
     # for p in participant:
     #     dual_fit_results.append(fit_dual(p))    
 
-    df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
-    df.to_csv('model_results/dual_fit_signed_initerror_results.csv')
+    # df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
+    # df.to_csv('model_results/dual_fit_signed_initerror_results.csv')
 
     single_fit_df = []
     dual_fit_df = []
