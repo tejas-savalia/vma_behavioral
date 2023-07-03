@@ -114,9 +114,9 @@ def fit_single(participant):
         errors = data.loc[data['p_id'] == participant, 'init signed errors'].values
         p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
         curr_fitval = np.inf
-        possible_starting_points = itertools.product(np.linspace(0, 1, 8), np.linspace(0, 1, 8), np.linspace(0, 1, 8))
+        possible_starting_points = itertools.product(np.linspace(0, 0.999, 8), np.linspace(0, 0.999, 8), np.linspace(0, 0.999, 8))
         for i in possible_starting_points:
-            temp_res = minimize(calc_log_likelihood, x0=i, args=(errors, 'single state', p_type), bounds=((0, 1), (0, 1), (0, 1)), method = 'Nelder-Mead')
+            temp_res = minimize(calc_log_likelihood, x0=i, args=(errors, 'single state', p_type), bounds=((0, 0.999), (0, 0.999), (0, 0.999)), method = 'Nelder-Mead')
             if temp_res.fun < curr_fitval:
                 res = temp_res
                 curr_fitval = res.fun
@@ -140,9 +140,9 @@ def fit_dual(participant):
         # print(As_init)
 
         curr_fitval = np.inf
-        possible_starting_points = itertools.product(np.linspace(0, 1, 8), np.linspace(0, 1, 8), np.linspace(0, 1, 8))
+        possible_starting_points = itertools.product(np.linspace(0, 0.999, 8), np.linspace(0, 0.999, 8), np.linspace(0, 0.999, 8))
         for i in possible_starting_points:
-            temp_res = minimize(calc_log_likelihood, x0=np.concatenate(([As_init, Bs_init], i)).tolist(), args=(errors, 'dual state', p_type), bounds=((0, 1), (0, 1), (0, 1), (0, 1), (0, 1)), method = 'Nelder-Mead')
+            temp_res = minimize(calc_log_likelihood, x0=np.concatenate(([As_init, Bs_init], i)).tolist(), args=(errors, 'dual state', p_type), bounds=((0, 0.999), (0, 0.999), (0, 0.999), (0, 0.999), (0, 0.999)), method = 'Nelder-Mead')
             if temp_res.fun < curr_fitval:
                 res = temp_res
                 curr_fitval = res.fun
@@ -199,13 +199,13 @@ if __name__ == '__main__':
     pool = mp.Pool()
     single_fit_results = pool.map(fit_single, participant)
     
-    df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'test gof', 'A', 'B', 'Eps'])
-    df.to_csv('model_results/single_fit_initsignederror_results_cv.csv')
+    df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
+    df.to_csv('model_results/single_fit_initsignederror_results.csv')
 
     dual_fit_results = pool.map(fit_dual, participant)
     
-    df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'test gof', 'A', 'B', 'Eps'])
-    df.to_csv('model_results/dual_fit_initsignederror_results_cv.csv')
+    df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
+    df.to_csv('model_results/dual_fit_initsignederror_results.csv')
 
 
     single_fit_df = []
