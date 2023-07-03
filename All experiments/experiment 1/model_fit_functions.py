@@ -117,7 +117,7 @@ def calc_log_likelihood(params, data, model, p_type, fit_type = 'regular', train
 
 
 def fit_single(participant):
-    data = pd.read_csv('df_learn_signed.csv')
+    data = pd.read_csv('df_learnwashout_signed.csv')
 
     print('participant started: ', participant)
 
@@ -142,8 +142,8 @@ def fit_single(participant):
 #load single fits to use as slow learning starting points.
 
 def fit_dual(participant):
-    single_fits = pd.read_csv('model_results/single_fit_signed_initerror_results.csv')
-    data = pd.read_csv('df_learn_signed.csv')
+    single_fits = pd.read_csv('model_results/single_fit_signed_initerror_learnwashout_results.csv')
+    data = pd.read_csv('df_learnwashout_signed.csv')
 
     print('participant started: ', participant)
 
@@ -171,7 +171,7 @@ def fit_dual(participant):
 
 def fit_single_cv(participant, errors, p_type, train_indices, test_indices):
     # print('participant started: ', participant)
-    single_fits = pd.read_csv('model_results/single_fit_signed_initerror_results.csv')
+    single_fits = pd.read_csv('model_results/single_fit_signed_initerror_learnwashout_results.csv')
 
     starting_point = single_fits.loc[single_fits['p_id'] == participant, ['A', 'B', 'Eps']].values.tolist()       
     res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'single state', p_type, 'cv', train_indices), bounds=((0, 0.999), (0, 0.999), (0, 0.999)), method = 'Nelder-Mead')
@@ -185,7 +185,7 @@ def fit_single_cv(participant, errors, p_type, train_indices, test_indices):
 #load single fits to use as slow learning starting points.
 
 def fit_dual_cv(participant, errors, p_type, train_indices, test_indices):
-    dual_fits = pd.read_csv('model_results/dual_fit_signed_initerror_results.csv')
+    dual_fits = pd.read_csv('model_results/dual_fit_signed_initerror_learnwashout_results.csv')
     # print('participant started: ', participant)
 
     # try:
@@ -199,7 +199,7 @@ def fit_dual_cv(participant, errors, p_type, train_indices, test_indices):
     return [participant, res.fun, test_gof, res.x[0], res.x[1], res.x[2], res.x[3], res.x[4]]
 
 def fit_cv(participant):
-    data = pd.read_csv('df_learn_signed.csv')
+    data = pd.read_csv('df_learnwashout_signed.csv')
 
     errors = data.loc[data['p_id'] == participant, 'init signed error'].values
     p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
@@ -220,17 +220,17 @@ if __name__ == '__main__':
     # for p in participant:
     #     single_fit_results.append(fit_single(p))    
 
-    # single_fit_results = pool.map(fit_single, participant)    
-    # df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
-    # df.to_csv('model_results/single_fit_signed_initerror_results.csv')
+    single_fit_results = pool.map(fit_single, participant)    
+    df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
+    df.to_csv('model_results/single_fit_signed_initerror_learnwashout_results.csv')
 
-    # dual_fit_results = pool.map(fit_dual, participant)    
+    dual_fit_results = pool.map(fit_dual, participant)    
     # dual_fit_results = []
     # for p in participant:
     #     dual_fit_results.append(fit_dual(p))    
 
-    # df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
-    # df.to_csv('model_results/dual_fit_signed_initerror_results.csv')
+    df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
+    df.to_csv('model_results/dual_fit_signed_initerror_learnwashout_results.csv')
 
     single_fit_df = []
     dual_fit_df = []
@@ -249,10 +249,10 @@ if __name__ == '__main__':
         print('cv iteration done: ', i)
 
     df_full_single = pd.concat(single_fit_df)
-    df_full_single.to_csv('model_results/single_fit_signed_initerror_results_cv.csv', index = False)
+    df_full_single.to_csv('model_results/single_fit_signed_initerror_learnwashout_results_cv.csv', index = False)
 
     df_full_dual = pd.concat(dual_fit_df)
-    df_full_dual.to_csv('model_results/dual_fit_signed_initerror_results_cv.csv', index=False)
+    df_full_dual.to_csv('model_results/dual_fit_signed_initerror_learnwashout_results_cv.csv', index=False)
 
 
     # dual_fit_results = pool.map(fit_dual, participant)
