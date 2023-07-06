@@ -84,12 +84,12 @@ def dual_state_model(As, Bs, Af, Bf, num_trials, p_type):
 
 def calc_log_likelihood(params, data, model, p_type, fit_type = 'regular', train_indices = None):
     if model == 'single state':
-        if any(params[:-1]) < 0 or any(params) > 1:
-            return np.inf
+        # if any(params[:-1]) < 0 or any(params) > 1:
+        #     return 100000
         model_pred = single_state_model(params[0], params[1], len(data), p_type)
     else:
-        if any(params) < 0 or any(params) > 1 or params[0] < params[2] or params[1] > params[3]:
-            return np.inf        
+        if params[0] < params[2] or params[1] > params[3]:
+            return 100000        
         model_pred = dual_state_model(params[0], params[1], params[2], params[3], len(data), p_type)
 
     if fit_type == 'cv':
@@ -114,13 +114,13 @@ def fit_single(participant):
         errors = data.loc[data['p_id'] == participant, 'init signed errors'].values
         p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
         curr_fitval = np.inf
-        possible_starting_points = itertools.product(np.linspace(0, 0.999, 8), np.linspace(0, 0.999, 8), np.linspace(0, 0.999, 8))
+        possible_starting_points = itertools.product(np.linspace(0, 1, 8), np.linspace(0, 1, 8), np.linspace(0.01, 5, 8))
         for i in possible_starting_points:
-            temp_res = minimize(calc_log_likelihood, x0=i, args=(errors, 'single state', p_type), bounds=((0, 0.999), (0, 0.999), (0, 0.999)), method = 'Nelder-Mead')
+            temp_res = minimize(calc_log_likelihood, x0=i, args=(errors, 'single state', p_type), bounds=((0, 1), (0, 1), (0.01, 5)), method = 'L-BFGS-B')
             if temp_res.fun < curr_fitval:
                 res = temp_res
                 curr_fitval = res.fun
-        print('participant done: ', participant)
+        print('participant done: ', participant, res.fun, res.x)
     except:
         print('participant failed: ', participant)
         return participant, np.nan, np.nan, np.nan, np.nan
@@ -142,13 +142,20 @@ def fit_dual(participant):
     # print(As_init)
 
     curr_fitval = np.inf
-    possible_starting_points = itertools.product(np.linspace(0, 0.999, 8), np.linspace(0, 0.999, 8))
+    possible_starting_points = itertools.product(np.linspace(0, As_init, 8), np.linspace(Bs_init, 1, 8))
     for i in possible_starting_points:
-        temp_res = minimize(calc_log_likelihood, x0=np.concatenate(([As_init, Bs_init], i, [Eps_init])).tolist(), args=(errors, 'dual state', p_type), bounds=((0, 0.999), (0, 0.999), (0, 0.999), (0, 0.999), (0, 1)), method = 'Nelder-Mead')
+        temp_res = minimize(calc_log_likelihood, x0=np.concatenate(([As_init, Bs_init], i, [Eps_init])).tolist(), args=(errors, 'dual state', p_type), method = 'L-BFGS-B', bounds = ((0, 1), (0, 1), (0, As_init), (Bs_init, 1), (0.01, 5)))
         if temp_res.fun < curr_fitval:
             res = temp_res
             curr_fitval = res.fun
-    print('participant done: ', participant)
+
+        # if  curr_fitval >= 10000:
+        #     temp_res = minimize(calc_log_likelihood, x0=[0.5, 0.5, 0.4, 0.6, 0.5], args=(errors, 'dual state', p_type), bounds=((0, 1), (0, 1), (0, 1), (0, 1), (0, 1)), method = 'Nelder-Mead')
+
+        #     res = temp_res
+        #     curr_fitval = res.fun
+
+    print('participant done: ', participant, res.fun, res.x)
 # except:
     # print('participant failed: ', participant)
     # return participant, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan
@@ -161,7 +168,7 @@ def fit_single_cv(participant, errors, p_type, train_indices, test_indices):
     single_fits = pd.read_csv('model_results/single_fit_initsignederror_results.csv')
 
     starting_point = single_fits.loc[single_fits['p_id'] == participant, ['A', 'B', 'Eps']].values.tolist()       
-    res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'single state', p_type, 'cv', train_indices), bounds=((0, 1), (0, 1), (0, 1)), method = 'Nelder-Mead')
+    res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'single state', p_type, 'cv', train_indices), bounds=((0, 1), (0, 1), (0.01, 5)), method = 'L-BFGS-B')
     test_gof = calc_log_likelihood(res.x, errors, 'single state', p_type, 'cv', test_indices)
     # print('participant done: ', participant)
     # except:
@@ -177,7 +184,7 @@ def fit_dual_cv(participant, errors, p_type, train_indices, test_indices):
 
     # try:
     starting_point = dual_fits.loc[dual_fits['p_id'] == participant, ['As', 'Bs', 'Af', 'Bf', 'Eps']].values.tolist()       
-    res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'dual state', p_type, 'cv', train_indices), bounds=((0, 1), (0, 1), (0, 1), (0, 1), (0, 1)), method = 'Nelder-Mead')
+    res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'dual state', p_type, 'cv', train_indices), bounds=((0, 1), (0, 1), (0, 1), (0, 1), (0.01, 5)), method = 'L-BFGS-B')
     test_gof = calc_log_likelihood(res.x, errors, 'dual state', p_type, 'cv', test_indices)
     # print('participant done: ', participant)
     # except:
@@ -203,7 +210,7 @@ if __name__ == '__main__':
     
     # df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
     # df.to_csv('model_results/single_fit_initsignederror_results.csv')
-
+    # # participant = [649, 651, 655, 647]
     dual_fit_results = pool.map(fit_dual, participant)
     
     df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
