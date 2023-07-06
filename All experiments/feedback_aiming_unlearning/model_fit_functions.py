@@ -142,9 +142,11 @@ def fit_dual(participant):
     # print(As_init)
 
     curr_fitval = np.inf
-    possible_starting_points = itertools.product(np.linspace(0, As_init, 8), np.linspace(Bs_init, 1, 8))
+    possible_starting_points = itertools.product(np.linspace(0, 1, 4), np.linspace(0, 1, 4), np.linspace(0, 1, 4), np.linspace(0, 1, 4), np.linspace(0.01, 5, 4))
     for i in possible_starting_points:
-        temp_res = minimize(calc_log_likelihood, x0=np.concatenate(([As_init, Bs_init], i, [Eps_init])).tolist(), args=(errors, 'dual state', p_type), method = 'L-BFGS-B', bounds = ((0, 1), (0, 1), (0, As_init), (Bs_init, 1), (0.01, 5)))
+        # x0=np.concatenate(([As_init, Bs_init], i, [Eps_init])).tolist()
+        x0 = i
+        temp_res = minimize(calc_log_likelihood, x0=x0, args=(errors, 'dual state', p_type), method = 'L-BFGS-B', bounds = ((0, 1), (0, 1), (0, As_init), (Bs_init, 1), (0.01, 5)))
         if temp_res.fun < curr_fitval:
             res = temp_res
             curr_fitval = res.fun
