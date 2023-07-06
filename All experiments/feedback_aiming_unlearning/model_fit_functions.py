@@ -151,8 +151,8 @@ def fit_dual(participant):
     print('participant done: ', participant)
 # except:
     # print('participant failed: ', participant)
-    return participant, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan
-    # return participant, res.fun, res.x[0], res.x[1], res.x[2], res.x[3], res.x[4]
+    # return participant, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan
+    return participant, res.fun, res.x[0], res.x[1], res.x[2], res.x[3], res.x[4]
 
 
 
