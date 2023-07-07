@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import scipy.stats as stat
-from scipy.optimize import minimize
+from scipy.optimize import minimize, basinhopping
 import itertools
 import multiprocessing as mp
 import warnings
@@ -14,7 +14,9 @@ def single_state_model(A, B, num_trials, p_type):
     if p_type == 'Sudden':
         # rotation = np.pi/3
         for trial in range(1, num_trials):
-            if trial in range(64*7 - 1, 64*8 - 1):
+            # if trial in range(64*7 - 1, 64*8 - 1):
+            if trial > 64*7 - 1 and trial <  64*8 - 1:
+
                 rotation = -np.pi/3
             else:
                 rotation = np.pi/3
@@ -32,7 +34,9 @@ def single_state_model(A, B, num_trials, p_type):
                 else:
                     rotation = np.pi/3
 
-            if trial in range(64*7 - 1, 64*8 - 1):
+            # if trial in range(64*7 - 1, 64*8 - 1):
+            if trial > 64*7 - 1 and trial <  64*8 - 1:
+
                 rotation = -np.pi/3
 
     error[trial] = rotation - rotation_estimate[trial]
@@ -88,7 +92,7 @@ def calc_log_likelihood(params, data, model, p_type, fit_type = 'regular', train
         #     return 100000
         model_pred = single_state_model(params[0], params[1], len(data), p_type)
     else:
-        if params[0] < params[2] or params[1] > params[3]:
+        if params[0] < params[2]  or params[1] > params[3]:
             return 100000        
         model_pred = dual_state_model(params[0], params[1], params[2], params[3], len(data), p_type)
 
@@ -98,13 +102,14 @@ def calc_log_likelihood(params, data, model, p_type, fit_type = 'regular', train
         log_lik = sum(stat.norm.logpdf(train_data, train_model_pred, params[-1]))
     else:
         log_lik = sum(stat.norm.logpdf(data, model_pred, params[-1]))
-
+    # print(params)
     return -log_lik
 
 
 ############ Fitting Functions
 #Load Data
 data = pd.read_csv('df_allphases.csv')
+data = data.loc[data['block no'] > 1].reset_index().drop('index', axis = 1)
 
 
 def fit_single(participant):
@@ -116,7 +121,7 @@ def fit_single(participant):
         curr_fitval = np.inf
         possible_starting_points = itertools.product(np.linspace(0, 1, 8), np.linspace(0, 1, 8), np.linspace(0.01, 5, 8))
         for i in possible_starting_points:
-            temp_res = minimize(calc_log_likelihood, x0=i, args=(errors, 'single state', p_type), bounds=((0, 1), (0, 1), (0.01, 5)), method = 'L-BFGS-B')
+            temp_res = minimize(calc_log_likelihood, x0=i, args=(errors, 'single state', p_type), bounds=((0, 1), (0, 1), (0.01, 5)), method = 'Nelder-Mead')
             if temp_res.fun < curr_fitval:
                 res = temp_res
                 curr_fitval = res.fun
@@ -142,15 +147,18 @@ def fit_dual(participant):
     # print(As_init)
 
     curr_fitval = np.inf
-    possible_starting_points = itertools.product(np.linspace(0, 1, 4), np.linspace(0, 1, 4), np.linspace(0, 1, 4), np.linspace(0, 1, 4), np.linspace(0.01, 5, 4))
+    possible_starting_points = itertools.product(np.linspace(0, 1, 16), np.linspace(0, 1, 16))
+    # possible_starting_points = itertools.product(np.linspace(0, 1, 4), np.linspace(0, 1, 4), np.linspace(0, 1, 4), np.linspace(0, 1, 4), np.linspace(0.01, 5, 4))
+
     for i in possible_starting_points:
-        # x0=np.concatenate(([As_init, Bs_init], i, [Eps_init])).tolist()
-        x0 = i
-        temp_res = minimize(calc_log_likelihood, x0=x0, args=(errors, 'dual state', p_type), method = 'L-BFGS-B', bounds = ((0, 1), (0, 1), (0, As_init), (Bs_init, 1), (0.01, 5)))
+        x0=np.concatenate(([As_init, Bs_init], i, [Eps_init])).tolist()
+        # x0 = i
+        temp_res = minimize(calc_log_likelihood, x0=x0, args=(errors, 'dual state', p_type), method = 'Nelder-Mead', bounds = ((0, 1), (0, 1), (0, As_init), (Bs_init, 1), (0.01, 5)))
         if temp_res.fun < curr_fitval:
             res = temp_res
             curr_fitval = res.fun
-
+        # minimizer_kwargs = {'method':'Nelder-Mead', "args":(errors, 'dual state', p_type), 'bounds' : ((0, 1), (0, 1), (0, As_init), (Bs_init, 1), (0.01, 5))}
+        # res = basinhopping(calc_log_likelihood, x0=res.x, minimizer_kwargs=minimizer_kwargs)
         # if  curr_fitval >= 10000:
         #     temp_res = minimize(calc_log_likelihood, x0=[0.5, 0.5, 0.4, 0.6, 0.5], args=(errors, 'dual state', p_type), bounds=((0, 1), (0, 1), (0, 1), (0, 1), (0, 1)), method = 'Nelder-Mead')
 
@@ -208,16 +216,15 @@ if __name__ == '__main__':
     participant = data['p_id'].unique()
     # participant = [641, 642]
     pool = mp.Pool()
-    # single_fit_results = pool.map(fit_single, participant)
-    
-    # df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
-    # df.to_csv('model_results/single_fit_initsignederror_results.csv')
-    # # participant = [649, 651, 655, 647]
+    single_fit_results = pool.map(fit_single, participant)
+    # participant = [651]
+    df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
+    df.to_csv('model_results/single_fit_initsignederror_results.csv')
     dual_fit_results = pool.map(fit_dual, participant)
     
     df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
+    
     df.to_csv('model_results/dual_fit_initsignederror_results.csv')
-
 
     single_fit_df = []
     dual_fit_df = []
