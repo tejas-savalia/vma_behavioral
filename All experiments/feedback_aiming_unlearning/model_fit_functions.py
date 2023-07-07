@@ -14,8 +14,8 @@ def single_state_model(A, B, num_trials, p_type):
     if p_type == 'Sudden':
         # rotation = np.pi/3
         for trial in range(1, num_trials):
-            # if trial in range(64*7 - 1, 64*8 - 1):
-            if trial > 64*7 - 1 and trial <  64*8 - 1:
+            if trial in range(64*7 - 1, 64*8 - 1):
+            # if trial > 64*7 - 1 and trial <  64*8 - 1:
 
                 rotation = -np.pi/3
             else:
@@ -34,8 +34,8 @@ def single_state_model(A, B, num_trials, p_type):
                 else:
                     rotation = np.pi/3
 
-            # if trial in range(64*7 - 1, 64*8 - 1):
-            if trial > 64*7 - 1 and trial <  64*8 - 1:
+            if trial in range(64*7 - 1, 64*8 - 1):
+            # if trial > 64*7 - 1 and trial <  64*8 - 1:
 
                 rotation = -np.pi/3
 
@@ -99,9 +99,9 @@ def calc_log_likelihood(params, data, model, p_type, fit_type = 'regular', train
     if fit_type == 'cv':
         train_data = data[train_indices]
         train_model_pred = model_pred[train_indices]
-        log_lik = sum(stat.norm.logpdf(train_data, train_model_pred, params[-1]))
+        log_lik = np.mean(stat.norm.logpdf(train_data, train_model_pred, params[-1]))
     else:
-        log_lik = sum(stat.norm.logpdf(data, model_pred, params[-1]))
+        log_lik = np.mean(stat.norm.logpdf(data, model_pred, params[-1]))
     # print(params)
     return -log_lik
 
@@ -121,7 +121,7 @@ def fit_single(participant):
         curr_fitval = np.inf
         possible_starting_points = itertools.product(np.linspace(0, 1, 8), np.linspace(0, 1, 8), np.linspace(0.01, 5, 8))
         for i in possible_starting_points:
-            temp_res = minimize(calc_log_likelihood, x0=i, args=(errors, 'single state', p_type), bounds=((0, 1), (0, 1), (0.01, 5)), method = 'Nelder-Mead')
+            temp_res = minimize(calc_log_likelihood, x0=i, args=(errors, 'single state', p_type), bounds=((.0001, 1), (0, .9999), (0.01, 5)), method = 'Nelder-Mead')
             if temp_res.fun < curr_fitval:
                 res = temp_res
                 curr_fitval = res.fun
