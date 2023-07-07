@@ -111,8 +111,8 @@ def calc_log_likelihood(params, data, model, p_type, fit_type = 'regular', train
 
 ############ Fitting Functions
 #Load Data
-data = pd.read_csv('df_allphases.csv')
-data = data.loc[data['block no'] > 1].reset_index().drop('index', axis = 1)
+data = pd.read_csv('df_allphases_initerror.csv')
+# data = data.loc[data['block no'] > 1].reset_index().drop('index', axis = 1)
 
 
 def fit_single(participant):
