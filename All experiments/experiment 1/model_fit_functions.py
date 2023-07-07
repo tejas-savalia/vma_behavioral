@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import scipy.stats as stat
-from scipy.optimize import minimize
+from scipy.optimize import minimize, basinhopping
 import itertools
 import multiprocessing as mp
 import warnings
@@ -12,33 +12,33 @@ def single_state_model(A, B, num_trials, p_type):
     rotation_estimate = np.zeros(num_trials)
     error = np.zeros(num_trials)
     if p_type == 'Sudden':
-        rotation = np.pi/2
-
+        # rotation = np.pi/3
         for trial in range(1, num_trials):
-            # if trial in range(64*7 - 1, 64*8 - 1):
-            #     rotation = -np.pi/3
-            # else:
-            #     rotation = np.pi/3
-            if trial >= 640:
+            if trial > 640:
+            # if trial > 64*7 - 1 and trial <  64*8 - 1:
+
                 rotation = 0
+            else:
+                rotation = np.pi/2
 
             error[trial-1] = rotation - rotation_estimate[trial-1]
             rotation_estimate[trial] = A*rotation_estimate[trial-1] + B*error[trial-1]
     else:
         rotation = np.pi/18
         for trial in range(1, num_trials):
-            error[trial-1] = rotation - rotation_estimate[trial-1]
-            rotation_estimate[trial] = A*rotation_estimate[trial-1] + B*error[trial-1]
             if trial%64 == 0:
                 if rotation < np.pi/2:
                     rotation = rotation + np.pi/18
                 else:
                     rotation = np.pi/2
-            if trial >= 640:
+
+            if trial > 640:
+            # if trial > 64*7 - 1 and trial <  64*8 - 1:
                 rotation = 0
 
-            # if trial in range(64*7 - 1, 64*8 - 1):
-            #     rotation = -np.pi/3
+            error[trial-1] = rotation - rotation_estimate[trial-1]
+            rotation_estimate[trial] = A*rotation_estimate[trial-1] + B*error[trial-1]
+
 
     error[trial] = rotation - rotation_estimate[trial]
     return error
@@ -50,16 +50,15 @@ def dual_state_model(As, Bs, Af, Bf, num_trials, p_type):
     
     error = np.zeros(num_trials)
     if p_type == 'Sudden':
-        rotation = np.pi/2
+        # rotation = np.pi/3
 
         for trial in range(1, num_trials):
-            if trial >= 640:
-                rotation = 0
+            if trial > 640:
+            # if trial > 64*7 - 1 and trial <  64*8 - 1:
 
-            # if trial in range(64*7 - 1, 64*8 - 1):
-            #     rotation = -np.pi/3
-            # else:
-            #     rotation = np.pi/3
+                rotation = 0
+            else:
+                rotation = np.pi/2
 
             error[trial-1] = rotation - rotation_estimate[trial-1]
             fast_estimate[trial] = Af*fast_estimate[trial-1] + Bf*error[trial-1]
@@ -69,6 +68,15 @@ def dual_state_model(As, Bs, Af, Bf, num_trials, p_type):
     else:
         rotation = np.pi/18
         for trial in range(1, num_trials):
+            if trial%64 == 0:
+                if rotation < np.pi/2:
+                    rotation = rotation + np.pi/18
+                else:
+                    rotation = np.pi/2
+
+            if trial > 640:
+            # if trial > 64*7 - 1 and trial <  64*8 - 1:
+                rotation = 0
 
 
             error[trial-1] = rotation - rotation_estimate[trial-1]
@@ -76,17 +84,6 @@ def dual_state_model(As, Bs, Af, Bf, num_trials, p_type):
             slow_estimate[trial] = As*slow_estimate[trial-1] + Bs*error[trial-1]
             rotation_estimate[trial] = fast_estimate[trial] + slow_estimate[trial]
 
-            if trial%64 == 0:
-                if rotation < np.pi/2:
-                    rotation = rotation + np.pi/18
-                else:
-                    rotation = np.pi/2
-                    
-            if trial >= 640:
-                rotation = 0
-
-            # if trial in range(64*7 - 1, 64*8 - 1):
-            #     rotation = -np.pi/3
 
     error[trial] = rotation - rotation_estimate[trial-1]
 
@@ -94,87 +91,99 @@ def dual_state_model(As, Bs, Af, Bf, num_trials, p_type):
 
 def calc_log_likelihood(params, data, model, p_type, fit_type = 'regular', train_indices = None):
     if model == 'single state':
-        if any(params[:-1]) < 0 or any(params[:-1]) > 1:
-            return np.inf
+        # if any(params[:-1]) < 0 or any(params) > 1:
+        #     return 100000
         model_pred = single_state_model(params[0], params[1], len(data), p_type)
     else:
-        if any(params) < 0 or any(params) > 1 or params[0] <= params[2] or params[1] >= params[3]:
-            return np.inf        
+        if params[0] < params[2]  or params[1] > params[3]:
+            return 100000        
         model_pred = dual_state_model(params[0], params[1], params[2], params[3], len(data), p_type)
 
     if fit_type == 'cv':
         train_data = data[train_indices]
         train_model_pred = model_pred[train_indices]
-        log_lik = sum(stat.norm.logpdf(train_data, train_model_pred, params[-1]))
+        log_lik = np.mean(stat.norm.logpdf(train_data, train_model_pred, params[-1]))
     else:
-        log_lik = sum(stat.norm.logpdf(data, model_pred, params[-1]))
-
+        log_lik = np.mean(stat.norm.logpdf(data, model_pred, params[-1]))
+    # print(params)
     return -log_lik
 
 
 ############ Fitting Functions
 #Load Data
+data = pd.read_csv('df_allphases.csv')
+data = data.loc[data['block no'] > 1].reset_index().drop('index', axis = 1)
 
 
 def fit_single(participant):
-    data = pd.read_csv('df_learnwashout_signed.csv')
-
     print('participant started: ', participant)
 
-    # try:
-    errors = data.loc[data['p_id'] == participant, 'init signed error'].values
-    p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
-    print(len(errors))
-
-    curr_fitval = np.inf
-    possible_starting_points = itertools.product(np.linspace(0, 0.999, 8), np.linspace(0, 0.999, 8), np.linspace(0, 0.999, 8))
-    for i in possible_starting_points:
-        temp_res = minimize(calc_log_likelihood, x0=i, args=(errors, 'single state', p_type), bounds=((0, 0.999), (0, 0.999), (0, 0.999)), method = 'Nelder-Mead')
-        if temp_res.fun < curr_fitval:
-            res = temp_res
-            curr_fitval = res.fun
-    print('participant done: ', participant)
-    # except:
-    #     print('participant failed: ', participant)
-    #     return participant, np.nan, np.nan, np.nan, np.nan
+    try:
+        #Slice for learning phase
+        errors = data.loc[data['p_id'] == participant, 'init signed errors'].values[64:704]
+        p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
+        curr_fitval = np.inf
+        possible_starting_points = itertools.product(np.linspace(0, 1, 8), np.linspace(0, 1, 8), np.linspace(0.01, 5, 8))
+        for i in possible_starting_points:
+            temp_res = minimize(calc_log_likelihood, x0=i, args=(errors, 'single state', p_type), bounds=((.0001, 1), (0, .9999), (0.01, 5)), method = 'Nelder-Mead')
+            if temp_res.fun < curr_fitval:
+                res = temp_res
+                curr_fitval = res.fun
+        print('participant done: ', participant, res.fun, res.x)
+    except:
+        print('participant failed: ', participant)
+        return participant, np.nan, np.nan, np.nan, np.nan
     return participant, res.fun, res.x[0], res.x[1], res.x[2]
 
 #load single fits to use as slow learning starting points.
 
 def fit_dual(participant):
-    single_fits = pd.read_csv('model_results/single_fit_signed_initerror_learnwashout_results.csv')
-    data = pd.read_csv('df_learnwashout_signed.csv')
-
+    single_fits = pd.read_csv('model_results/single_fit_initsignederror_results.csv')
     print('participant started: ', participant)
 
-    try:
-        errors = data.loc[data['p_id'] == participant, 'init signed error'].values
-        p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
-        As_init = single_fits.loc[single_fits['p_id'] == participant, 'A'].values[0]
-        Bs_init = single_fits.loc[single_fits['p_id'] == participant, 'B'].values[0]
-        print(len(errors))
+    # try:
+        #Slice for learning phase
+    errors = data.loc[data['p_id'] == participant, 'init signed errors'].values[64:704]
+    p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
+    As_init = single_fits.loc[single_fits['p_id'] == participant, 'A'].values[0]
+    Bs_init = single_fits.loc[single_fits['p_id'] == participant, 'B'].values[0]
+    Eps_init = single_fits.loc[single_fits['p_id'] == participant, 'Eps'].values[0]
 
-        curr_fitval = np.inf
-        possible_starting_points = itertools.product(np.linspace(0, 0.999, 8), np.linspace(0, 0.999, 8), np.linspace(0, 0.999, 8))
-        for i in possible_starting_points:
-            temp_res = minimize(calc_log_likelihood, x0=np.concatenate(([As_init, Bs_init], i)).tolist(), args=(errors, 'dual state', p_type), bounds=((0, 0.999), (0, 0.999), (0, 0.999), (0, 0.999), (0, 0.999)), method = 'Nelder-Mead')
-            if temp_res.fun < curr_fitval:
-                res = temp_res
-                curr_fitval = res.fun
-        print('participant done: ', participant)
-    except:
-        print('participant failed: ', participant)
-        return participant, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan
+    # print(As_init)
+
+    curr_fitval = np.inf
+    possible_starting_points = itertools.product(np.linspace(0, 1, 16), np.linspace(0, 1, 16))
+    # possible_starting_points = itertools.product(np.linspace(0, 1, 4), np.linspace(0, 1, 4), np.linspace(0, 1, 4), np.linspace(0, 1, 4), np.linspace(0.01, 5, 4))
+
+    for i in possible_starting_points:
+        x0=np.concatenate(([As_init, Bs_init], i, [Eps_init])).tolist()
+        # x0 = i
+        temp_res = minimize(calc_log_likelihood, x0=x0, args=(errors, 'dual state', p_type), method = 'Nelder-Mead', bounds = ((0, 1), (0, 1), (0, As_init), (Bs_init, 1), (0.01, 5)))
+        if temp_res.fun < curr_fitval:
+            res = temp_res
+            curr_fitval = res.fun
+        # minimizer_kwargs = {'method':'Nelder-Mead', "args":(errors, 'dual state', p_type), 'bounds' : ((0, 1), (0, 1), (0, As_init), (Bs_init, 1), (0.01, 5))}
+        # res = basinhopping(calc_log_likelihood, x0=res.x, minimizer_kwargs=minimizer_kwargs)
+        # if  curr_fitval >= 10000:
+        #     temp_res = minimize(calc_log_likelihood, x0=[0.5, 0.5, 0.4, 0.6, 0.5], args=(errors, 'dual state', p_type), bounds=((0, 1), (0, 1), (0, 1), (0, 1), (0, 1)), method = 'Nelder-Mead')
+
+        #     res = temp_res
+        #     curr_fitval = res.fun
+
+    print('participant done: ', participant, res.fun, res.x)
+# except:
+    # print('participant failed: ', participant)
+    # return participant, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan
     return participant, res.fun, res.x[0], res.x[1], res.x[2], res.x[3], res.x[4]
 
 
 
 def fit_single_cv(participant, errors, p_type, train_indices, test_indices):
     # print('participant started: ', participant)
-    single_fits = pd.read_csv('model_results/single_fit_signed_initerror_learnwashout_results.csv')
+    single_fits = pd.read_csv('model_results/single_fit_initsignederror_results.csv')
 
     starting_point = single_fits.loc[single_fits['p_id'] == participant, ['A', 'B', 'Eps']].values.tolist()       
-    res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'single state', p_type, 'cv', train_indices), bounds=((0, 0.999), (0, 0.999), (0, 0.999)), method = 'Nelder-Mead')
+    res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'single state', p_type, 'cv', train_indices), bounds=((0, 1), (0, 1), (0.01, 5)), method = 'L-BFGS-B')
     test_gof = calc_log_likelihood(res.x, errors, 'single state', p_type, 'cv', test_indices)
     # print('participant done: ', participant)
     # except:
@@ -185,12 +194,12 @@ def fit_single_cv(participant, errors, p_type, train_indices, test_indices):
 #load single fits to use as slow learning starting points.
 
 def fit_dual_cv(participant, errors, p_type, train_indices, test_indices):
-    dual_fits = pd.read_csv('model_results/dual_fit_signed_initerror_learnwashout_results.csv')
     # print('participant started: ', participant)
+    dual_fits = pd.read_csv('model_results/dual_fit_initsignederror_results.csv')
 
     # try:
     starting_point = dual_fits.loc[dual_fits['p_id'] == participant, ['As', 'Bs', 'Af', 'Bf', 'Eps']].values.tolist()       
-    res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'dual state', p_type, 'cv', train_indices), bounds=((0, 0.999), (0, 0.999), (0, 0.999), (0, 0.999), (0, 0.999)), method = 'Nelder-Mead')
+    res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'dual state', p_type, 'cv', train_indices), bounds=((0, 1), (0, 1), (0, 1), (0, 1), (0.01, 5)), method = 'L-BFGS-B')
     test_gof = calc_log_likelihood(res.x, errors, 'dual state', p_type, 'cv', test_indices)
     # print('participant done: ', participant)
     # except:
@@ -199,9 +208,7 @@ def fit_dual_cv(participant, errors, p_type, train_indices, test_indices):
     return [participant, res.fun, test_gof, res.x[0], res.x[1], res.x[2], res.x[3], res.x[4]]
 
 def fit_cv(participant):
-    data = pd.read_csv('df_learnwashout_signed.csv')
-
-    errors = data.loc[data['p_id'] == participant, 'init signed error'].values
+    errors = data.loc[data['p_id'] == participant, 'init signed errors'].values
     p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
     train_indices = np.sort(np.random.choice(np.arange(len(errors)), int(0.9*len(errors)), replace = False))
     test_indices = np.sort(np.delete(np.arange(len(errors)), train_indices)) 
@@ -211,26 +218,18 @@ def fit_cv(participant):
 
 
 if __name__ == '__main__':
-    # data = pd.read_csv('df_learnwashout_signed.csv')
-
-    # participant = data['p_id'].unique()
-    participant = np.arange(60)
+    participant = data['p_id'].unique()
+    # participant = [641, 642]
     pool = mp.Pool()
-    # single_fit_results = []
-    # for p in participant:
-    #     single_fit_results.append(fit_single(p))    
-
-    single_fit_results = pool.map(fit_single, participant)    
+    single_fit_results = pool.map(fit_single, participant)
+    # participant = [651]
     df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
-    df.to_csv('model_results/single_fit_signed_initerror_learnwashout_results.csv')
-
-    dual_fit_results = pool.map(fit_dual, participant)    
-    # dual_fit_results = []
-    # for p in participant:
-    #     dual_fit_results.append(fit_dual(p))    
-
+    df.to_csv('model_results/single_fit_initsignederror_results.csv')
+    dual_fit_results = pool.map(fit_dual, participant)
+    
     df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
-    df.to_csv('model_results/dual_fit_signed_initerror_learnwashout_results.csv')
+    
+    df.to_csv('model_results/dual_fit_initsignederror_results.csv')
 
     single_fit_df = []
     dual_fit_df = []
@@ -249,10 +248,10 @@ if __name__ == '__main__':
         print('cv iteration done: ', i)
 
     df_full_single = pd.concat(single_fit_df)
-    df_full_single.to_csv('model_results/single_fit_signed_initerror_learnwashout_results_cv.csv', index = False)
+    df_full_single.to_csv('model_results/single_fit_initsignederror_results_cv.csv', index = False)
 
     df_full_dual = pd.concat(dual_fit_df)
-    df_full_dual.to_csv('model_results/dual_fit_signed_initerror_learnwashout_results_cv.csv', index=False)
+    df_full_dual.to_csv('model_results/dual_fit_initsignederror_results_cv.csv', index=False)
 
 
     # dual_fit_results = pool.map(fit_dual, participant)
