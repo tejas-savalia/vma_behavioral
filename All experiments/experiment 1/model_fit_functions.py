@@ -208,7 +208,7 @@ def fit_dual_cv(participant, errors, p_type, train_indices, test_indices):
     return [participant, res.fun, test_gof, res.x[0], res.x[1], res.x[2], res.x[3], res.x[4]]
 
 def fit_cv(participant):
-    errors = data.loc[data['p_id'] == participant, 'init signed errors'].values
+    errors = data.loc[data['p_id'] == participant, 'init signed errors'].values[64:704]
     p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
     train_indices = np.sort(np.random.choice(np.arange(len(errors)), int(0.9*len(errors)), replace = False))
     test_indices = np.sort(np.delete(np.arange(len(errors)), train_indices)) 
@@ -221,15 +221,15 @@ if __name__ == '__main__':
     participant = data['p_id'].unique()
     # participant = [641, 642]
     pool = mp.Pool()
-    single_fit_results = pool.map(fit_single, participant)
-    # participant = [651]
-    df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
-    df.to_csv('model_results/single_fit_initsignederror_results.csv')
-    dual_fit_results = pool.map(fit_dual, participant)
+    # single_fit_results = pool.map(fit_single, participant)
+    # # participant = [651]
+    # df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
+    # df.to_csv('model_results/single_fit_initsignederror_results.csv')
+    # dual_fit_results = pool.map(fit_dual, participant)
     
-    df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
+    # df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
     
-    df.to_csv('model_results/dual_fit_initsignederror_results.csv')
+    # df.to_csv('model_results/dual_fit_initsignederror_results.csv')
 
     single_fit_df = []
     dual_fit_df = []
