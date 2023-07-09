@@ -183,8 +183,8 @@ def fit_single_cv(participant, errors, p_type, train_indices, test_indices):
     single_fits = pd.read_csv('model_results/single_fit_initerror_results.csv')
 
     starting_point = single_fits.loc[single_fits['p_id'] == participant, ['A', 'B', 'Eps']].values.tolist()       
-    # res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'single state', p_type, 'cv', train_indices), bounds=((0, 1), (0, 1), (0.01, 5)), method = 'Nelder-Mead')
-    res = basinhopping(calc_log_likelihood, x0=starting_point, minimizer_kwargs={'args': (errors, 'single state', p_type, 'cv', train_indices), 'bounds': ((0, 1), (0, 1), (0.01, 5)), 'method':'Nelder-Mead'})
+    res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'single state', p_type, 'cv', train_indices), bounds=((0.0001, 1), (0, 0.9999), (0.01, 5)), method = 'Nelder-Mead')
+    # res = basinhopping(calc_log_likelihood, x0=starting_point, minimizer_kwargs={'args': (errors, 'single state', p_type, 'cv', train_indices), 'bounds': ((0, 1), (0, 1), (0.01, 5)), 'method':'Nelder-Mead'})
 
     test_gof = calc_log_likelihood(res.x, errors, 'single state', p_type, 'cv', test_indices)
     # print('participant done: ', participant)
@@ -198,12 +198,15 @@ def fit_single_cv(participant, errors, p_type, train_indices, test_indices):
 def fit_dual_cv(participant, errors, p_type, train_indices, test_indices):
     # print('participant started: ', participant)
     dual_fits = pd.read_csv('model_results/dual_fit_initerror_results.csv')
+    single_fits = pd.read_csv('model_results/single_fit_initerror_results.csv')
+    As_single = single_fits.loc[single_fits['p_id'] == participant, 'A'].values[0]
+    Bs_single = single_fits.loc[single_fits['p_id'] == participant, 'B'].values[0]
 
     # try:
     starting_point = dual_fits.loc[dual_fits['p_id'] == participant, ['As', 'Bs', 'Af', 'Bf', 'Eps']].values.tolist()       
     # res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'dual state', p_type, 'cv', train_indices), bounds=((0, 1), (0, 1), (0, 1), (0, 1), (0.01, 5)), method = 'Nelder-Mead')
-    # res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'dual state', p_type, 'cv', train_indices), bounds=((0, 1), (0, 1), (0, 1), (0, 1), (0.01, 5)), method = 'Nelder-Mead')
-    res = basinhopping(calc_log_likelihood, x0=starting_point, minimizer_kwargs={'args': (errors, 'dual state', p_type, 'cv', train_indices), 'bounds': ((0, 1), (0, 1), (0, 1), (0, 1), (0.01, 5)), 'method':'Nelder-Mead'})
+    res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'dual state', p_type, 'cv', train_indices), bounds=((0, 1), (0, 1), (0, As_single), (Bs_single, 1), (0.01, 5)), method = 'Nelder-Mead')
+    # res = basinhopping(calc_log_likelihood, x0=starting_point, minimizer_kwargs={'args': (errors, 'dual state', p_type, 'cv', train_indices), 'bounds': ((0, 1), (0, 1), (0, 1), (0, 1), (0.01, 5)), 'method':'Nelder-Mead'})
     test_gof = calc_log_likelihood(res.x, errors, 'dual state', p_type, 'cv', test_indices)
     # print('participant done: ', participant)
     # except:
