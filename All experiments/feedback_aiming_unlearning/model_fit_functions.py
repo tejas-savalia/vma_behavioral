@@ -153,7 +153,7 @@ def fit_dual(participant):
     for i in possible_starting_points:
         x0=np.concatenate(([As_init, Bs_init], i, [Eps_init])).tolist()
         # x0 = i
-        temp_res = minimize(calc_log_likelihood, x0=x0, args=(errors, 'dual state', p_type), method = 'Nelder-Mead', bounds = ((0, 1), (0, 1), (0, As_init), (Bs_init, 1), (0.01, 5)))
+        temp_res = minimize(calc_log_likelihood, x0=x0, args=(errors, 'dual state', p_type), method = 'Nelder-Mead', bounds = ((0, 1), (0, 1), (0, 1), (1, 1), (0.01, 5)))
         if temp_res.fun < curr_fitval:
             res = temp_res
             curr_fitval = res.fun
@@ -194,7 +194,7 @@ def fit_dual_cv(participant, errors, p_type, train_indices, test_indices):
 
     # try:
     starting_point = dual_fits.loc[dual_fits['p_id'] == participant, ['As', 'Bs', 'Af', 'Bf', 'Eps']].values.tolist()       
-    res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'dual state', p_type, 'cv', train_indices), bounds=((0, 1), (0, 1), (0, 1), (0, 1), (0.01, 5)), method = 'L-BFGS-B')
+    res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'dual state', p_type, 'cv', train_indices), bounds=((0, 1), (0, 1), (0, 1), (0, 1), (0.01, 5)), method = 'Nelder-Mead')
     test_gof = calc_log_likelihood(res.x, errors, 'dual state', p_type, 'cv', test_indices)
     # print('participant done: ', participant)
     # except:
