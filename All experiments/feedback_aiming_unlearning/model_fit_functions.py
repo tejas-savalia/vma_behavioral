@@ -228,13 +228,13 @@ if __name__ == '__main__':
     participant = data['p_id'].unique()
     # participant = [641, 642]
     pool = mp.Pool()
-    # single_fit_results = pool.map(fit_single, participant)
-    # df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
-    # df.to_csv('model_results/single_fit_initerror_results.csv')
+    single_fit_results = pool.map(fit_single, participant)
+    df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
+    df.to_csv('model_results/single_fit_initerror_results.csv')
 
-    # dual_fit_results = pool.map(fit_dual, participant)
-    # df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
-    # df.to_csv('model_results/dual_fit_initsignederror_results.csv')
+    dual_fit_results = pool.map(fit_dual, participant)
+    df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
+    df.to_csv('model_results/dual_fit_initsignederror_results.csv')
 
     single_fit_df = []
     dual_fit_df = []
