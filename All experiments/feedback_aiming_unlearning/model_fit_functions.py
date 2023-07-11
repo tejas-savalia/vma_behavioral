@@ -159,13 +159,13 @@ def fit_dual(participant):
     # print(As_init)
 
     curr_fitval = np.inf
-    possible_starting_points = itertools.product(np.linspace(0.0001, 0.9999, 16), np.linspace(0.0001, 0.9999, 16))
+    possible_starting_points = itertools.product(np.linspace(0.0001, Bs_init, 16), np.linspace(Bs_init, 0.9999, 16))
     # possible_starting_points = itertools.product(np.linspace(0, 1, 4), np.linspace(0, 1, 4), np.linspace(0, 1, 4), np.linspace(0, 1, 4), np.linspace(0.01, 5, 4))
 
     for i in possible_starting_points:
         x0=np.concatenate(([As_init, Bs_init], i, [Eps_init])).tolist()
         # x0 = i
-        temp_res = minimize(calc_log_likelihood, x0=x0, args=(errors, 'dual state', p_type), method = 'L-BFGS-B', bounds = ((0.0001, .9999), (0.0001, .9999), (0.0001, .9999), (0.0001, .9999), (0.01, 5)))
+        temp_res = minimize(calc_log_likelihood, x0=x0, args=(errors, 'dual state', p_type), method = 'L-BFGS-B', bounds = ((0.0001, .9999), (0.0001, .9999), (0, As_init), (Bs_init, 1), (0.01, 5)))
         if temp_res.fun < curr_fitval:
             res = temp_res
             curr_fitval = res.fun
@@ -228,9 +228,9 @@ if __name__ == '__main__':
     participant = data['p_id'].unique()
     # participant = [641, 642]
     pool = mp.Pool()
-    single_fit_results = pool.map(fit_single, participant)
-    df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
-    df.to_csv('model_results/single_fit_initerror_results.csv')
+    # single_fit_results = pool.map(fit_single, participant)
+    # df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
+    # df.to_csv('model_results/single_fit_initerror_results.csv')
 
     dual_fit_results = pool.map(fit_dual, participant)
     df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
