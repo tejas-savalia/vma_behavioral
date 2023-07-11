@@ -21,12 +21,16 @@ def single_state_model(A, B, num_trials, p_type):
             else:
                 rotation = np.pi/3
 
-            error[trial-1] = np.abs(rotation - rotation_estimate[trial-1])
+            # error[trial-1] = np.abs(rotation - rotation_estimate[trial-1])
+            error[trial-1] = rotation - rotation_estimate[trial-1]
+
             rotation_estimate[trial] = A*rotation_estimate[trial-1] + B*error[trial-1]
     else:
         rotation = np.pi/18
         for trial in range(1, num_trials):
-            error[trial-1] = np.abs(rotation - rotation_estimate[trial-1])
+            # error[trial-1] = np.abs(rotation - rotation_estimate[trial-1])
+            error[trial-1] = rotation - rotation_estimate[trial-1]
+
             rotation_estimate[trial] = A*rotation_estimate[trial-1] + B*error[trial-1]
             if trial%64 == 0:
                 if rotation < np.pi/3:
@@ -39,7 +43,9 @@ def single_state_model(A, B, num_trials, p_type):
 
                 rotation = -np.pi/3
 
-    error[trial] = np.abs(rotation - rotation_estimate[trial])
+    # error[trial] = np.abs(rotation - rotation_estimate[trial])
+    error[trial-1] = rotation - rotation_estimate[trial-1]
+
     return error
 
 def dual_state_model(As, Bs, Af, Bf, num_trials, p_type):
@@ -58,7 +64,9 @@ def dual_state_model(As, Bs, Af, Bf, num_trials, p_type):
             else:
                 rotation = np.pi/3
 
-            error[trial-1] = np.abs(rotation - rotation_estimate[trial-1])
+            # error[trial-1] = np.abs(rotation - rotation_estimate[trial-1])
+            error[trial-1] = rotation - rotation_estimate[trial-1]
+
             fast_estimate[trial] = Af*fast_estimate[trial-1] + Bf*error[trial-1]
             slow_estimate[trial] = As*slow_estimate[trial-1] + Bs*error[trial-1]
             rotation_estimate[trial] = fast_estimate[trial] + slow_estimate[trial]
@@ -68,7 +76,9 @@ def dual_state_model(As, Bs, Af, Bf, num_trials, p_type):
         for trial in range(1, num_trials):
 
 
-            error[trial-1] = np.abs(rotation - rotation_estimate[trial-1])
+            # error[trial-1] = np.abs(rotation - rotation_estimate[trial-1])
+            error[trial-1] = rotation - rotation_estimate[trial-1]
+
             fast_estimate[trial] = Af*fast_estimate[trial-1] + Bf*error[trial-1]
             slow_estimate[trial] = As*slow_estimate[trial-1] + Bs*error[trial-1]
             rotation_estimate[trial] = fast_estimate[trial] + slow_estimate[trial]
@@ -82,7 +92,8 @@ def dual_state_model(As, Bs, Af, Bf, num_trials, p_type):
             if trial > 64*7 - 1 and trial < 64*8:
                 rotation = -np.pi/3
 
-    error[trial] = np.abs(rotation - rotation_estimate[trial-1])
+    # error[trial] = np.abs(rotation - rotation_estimate[trial-1])
+    error[trial-1] = rotation - rotation_estimate[trial-1]
 
     return error
 
