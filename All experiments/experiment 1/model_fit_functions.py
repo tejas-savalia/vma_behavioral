@@ -103,8 +103,8 @@ def calc_log_likelihood(params, data, model, p_type, fit_type = 'regular', train
         #     return 100000
         model_pred = single_state_model(params[0], params[1], len(data), p_type)
     else:
-        if params[0] < params[2]  or params[1] > params[3]:
-            return 100000        
+        # if params[0] < params[2]  or params[1] > params[3]:
+        #     return 100000        
         model_pred = dual_state_model(params[0], params[1], params[2], params[3], len(data), p_type)
 
     if fit_type == 'cv':
@@ -120,7 +120,7 @@ def calc_log_likelihood(params, data, model, p_type, fit_type = 'regular', train
 ############ Fitting Functions
 #Load Data
 data = pd.read_csv('df_allphases_errors.csv')
-data = data.loc[((data['block'] > 0) & (data['block'] < 11))].reset_index().drop('index', axis = 1)
+data = data.loc[((data['Block'] > 0) & (data['Block'] < 11))].reset_index().drop('index', axis = 1)
 
 
 def fit_single(participant):
@@ -228,9 +228,9 @@ if __name__ == '__main__':
     participant = data['p_id'].unique()
     # participant = [641, 642]
     pool = mp.Pool()
-    single_fit_results = pool.map(fit_single, participant)
-    df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
-    df.to_csv('model_results/single_fit_avgsignederror_results.csv')
+    # single_fit_results = pool.map(fit_single, participant)
+    # df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
+    # df.to_csv('model_results/single_fit_avgsignederror_results.csv')
 
     dual_fit_results = pool.map(fit_dual, participant)
     df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
