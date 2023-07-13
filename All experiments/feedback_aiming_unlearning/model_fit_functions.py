@@ -28,8 +28,8 @@ def single_state_model(A, B, num_trials, p_type):
     else:
         rotation = np.pi/18
         for trial in range(1, num_trials):
-            # error[trial-1] = np.abs(rotation - rotation_estimate[trial-1])
-            error[trial-1] = rotation - rotation_estimate[trial-1]
+            error[trial-1] = np.abs(rotation - rotation_estimate[trial-1])
+            # error[trial-1] = rotation - rotation_estimate[trial-1]
 
             rotation_estimate[trial] = A*rotation_estimate[trial-1] + B*error[trial-1]
             if trial%64 == 0:
@@ -43,10 +43,10 @@ def single_state_model(A, B, num_trials, p_type):
 
                 rotation = -np.pi/3
 
-    # error[trial] = np.abs(rotation - rotation_estimate[trial])
-    error[trial-1] = rotation - rotation_estimate[trial-1]
+    error[trial] = np.abs(rotation - rotation_estimate[trial])
+    # error[trial-1] = rotation - rotation_estimate[trial-1]
 
-    return error
+    return np.abs(error)
 
 def dual_state_model(As, Bs, Af, Bf, num_trials, p_type):
     rotation_estimate = np.zeros(num_trials)
