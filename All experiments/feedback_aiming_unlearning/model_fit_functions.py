@@ -103,15 +103,21 @@ def calc_log_likelihood(params, data, model, p_type, fit_type = 'regular', train
         #     return 100000
         model_pred = single_state_model(params[0], params[1], len(data), p_type)
     else:
-        # if params[0] < params[2]  or params[1] > params[3]:
-        #     return 100000        
+        if params[0] < params[2]  or params[1] > params[3]:
+            return 100000        
         model_pred = dual_state_model(params[0], params[1], params[2], params[3], len(data), p_type)
 
     if fit_type == 'cv':
         train_data = data[train_indices]
         train_model_pred = model_pred[train_indices]
         log_lik = np.mean(stat.norm.logpdf(train_data, train_model_pred, params[-1]))
+        # if model == 'dual state':
+        #     if params[0] < params[2]  or params[1] > params[3]:
+        #         return 100000        
+
     else:
+        
+
         log_lik = np.mean(stat.norm.logpdf(data, model_pred, params[-1]))
     # print(params)
     return -log_lik
@@ -125,32 +131,32 @@ data = data.loc[((data['block'] >= 1) & (data['block'] <= 7))].reset_index().dro
 
 def fit_single(participant):
     print('participant started: ', participant)
-    try:
-        errors = data.loc[data['p_id'] == participant, 'avg errors'].values
-        print(len(errors))
+    # try:
+    errors = data.loc[data['p_id'] == participant, 'avg smooth errors'].values
+    print(len(errors))
 
-        p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
-        curr_fitval = np.inf
-        possible_starting_points = itertools.product(np.linspace(0.0001, 0.9999, 8), np.linspace(0.0001, 0.9999, 8), np.linspace(0.01, 5, 8))
-        for i in possible_starting_points:
-            temp_res = minimize(calc_log_likelihood, x0=i, args=(errors, 'single state', p_type), bounds=((.0001, .9999), (.0001, .9999), (0.01, 5)), method = 'Nelder-Mead')
-            if temp_res.fun < curr_fitval:
-                res = temp_res
-                curr_fitval = res.fun
-        print('participant done: ', participant, res.fun, res.x)
-    except:
-        print('participant failed: ', participant)
-        return participant, np.nan, np.nan, np.nan, np.nan
+    p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
+    curr_fitval = np.inf
+    possible_starting_points = itertools.product(np.linspace(0.0001, 0.9999, 8), np.linspace(0.0001, 0.9999, 8), np.linspace(0.01, 5, 8))
+    for i in possible_starting_points:
+        temp_res = minimize(calc_log_likelihood, x0=i, args=(errors, 'single state', p_type), bounds=((0, 1), (0, 1), (0.01, 5)), method = 'Nelder-Mead')
+        if temp_res.fun < curr_fitval:
+            res = temp_res
+            curr_fitval = res.fun
+    print('participant done: ', participant, res.fun, res.x)
+    # except:
+    #     print('participant failed: ', participant)
+    #     return participant, np.nan, np.nan, np.nan, np.nan
     return participant, res.fun, res.x[0], res.x[1], res.x[2]
 
 #load single fits to use as slow learning starting points.
 
 def fit_dual(participant):
-    single_fits = pd.read_csv('model_results/single_fit_avgerror_learn_results.csv')
+    single_fits = pd.read_csv('model_results/single_fit_avgsmootherror_learn_results.csv')
     print('participant started: ', participant)
 
     # try:
-    errors = data.loc[data['p_id'] == participant, 'avg errors'].values
+    errors = data.loc[data['p_id'] == participant, 'avg smooth errors'].values
     p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
     As_init = single_fits.loc[single_fits['p_id'] == participant, 'A'].values[0]
     Bs_init = single_fits.loc[single_fits['p_id'] == participant, 'B'].values[0]
@@ -159,13 +165,13 @@ def fit_dual(participant):
     # print(As_init)
 
     curr_fitval = np.inf
-    possible_starting_points = itertools.product(np.linspace(0.0001, Bs_init, 16), np.linspace(Bs_init, 0.9999, 16))
+    possible_starting_points = itertools.product(np.linspace(0.0001, As_init, 8), np.linspace(Bs_init, 0.9999, 8))
     # possible_starting_points = itertools.product(np.linspace(0, 1, 4), np.linspace(0, 1, 4), np.linspace(0, 1, 4), np.linspace(0, 1, 4), np.linspace(0.01, 5, 4))
 
     for i in possible_starting_points:
         x0=np.concatenate(([As_init, Bs_init], i, [Eps_init])).tolist()
         # x0 = i
-        temp_res = minimize(calc_log_likelihood, x0=x0, args=(errors, 'dual state', p_type), method = 'L-BFGS-B', bounds = ((0.0001, .9999), (0.0001, .9999), (0, As_init), (Bs_init, 1), (0.01, 5)))
+        temp_res = minimize(calc_log_likelihood, x0=x0, args=(errors, 'dual state', p_type), method = 'Nelder-Mead', bounds = ((0, 1), (0, 1), (0, 1), (0, 1), (0.01, 5)))
         if temp_res.fun < curr_fitval:
             res = temp_res
             curr_fitval = res.fun
@@ -187,7 +193,7 @@ def fit_dual(participant):
 
 def fit_single_cv(participant, errors, p_type, train_indices, test_indices):
     # print('participant started: ', participant)
-    single_fits = pd.read_csv('model_results/single_fit_avgerror_learn_results.csv')
+    single_fits = pd.read_csv('model_results/single_fit_avgsmootherror_learn_results.csv')
 
     starting_point = single_fits.loc[single_fits['p_id'] == participant, ['A', 'B', 'Eps']].values.tolist()       
     res = minimize(calc_log_likelihood, x0=starting_point, args=(errors, 'single state', p_type, 'cv', train_indices), bounds=((0, 1), (0, 1), (0.01, 5)), method = 'Nelder-Mead')
@@ -202,7 +208,7 @@ def fit_single_cv(participant, errors, p_type, train_indices, test_indices):
 
 def fit_dual_cv(participant, errors, p_type, train_indices, test_indices):
     # print('participant started: ', participant)
-    dual_fits = pd.read_csv('model_results/dual_fit_avgerror_learn_results.csv')
+    dual_fits = pd.read_csv('model_results/dual_fit_avgsmootherror_learn_results.csv')
 
     # try:
     starting_point = dual_fits.loc[dual_fits['p_id'] == participant, ['As', 'Bs', 'Af', 'Bf', 'Eps']].values.tolist()       
@@ -215,7 +221,7 @@ def fit_dual_cv(participant, errors, p_type, train_indices, test_indices):
     return [participant, res.fun, test_gof, res.x[0], res.x[1], res.x[2], res.x[3], res.x[4]]
 
 def fit_cv(participant):
-    errors = data.loc[data['p_id'] == participant, 'avg errors'].values
+    errors = data.loc[data['p_id'] == participant, 'avg smooth errors'].values
     p_type = data.loc[data['p_id'] == participant, 'Rotation'].unique()
     train_indices = np.sort(np.random.choice(np.arange(len(errors)), int(0.9*len(errors)), replace = False))
     test_indices = np.sort(np.delete(np.arange(len(errors)), train_indices)) 
@@ -230,11 +236,11 @@ if __name__ == '__main__':
     pool = mp.Pool()
     single_fit_results = pool.map(fit_single, participant)
     df = pd.DataFrame(single_fit_results, columns =['p_id', 'gof', 'A', 'B', 'Eps'])
-    df.to_csv('model_results/single_fit_avgerror_learn_results.csv')
+    df.to_csv('model_results/single_fit_avgsmootherror_learn_results.csv')
 
     dual_fit_results = pool.map(fit_dual, participant)
     df = pd.DataFrame(dual_fit_results, columns =['p_id', 'gof', 'As', 'Bs', 'Af', 'Bf', 'Eps'])
-    df.to_csv('model_results/dual_fit_avgerror_learn_results.csv')
+    df.to_csv('model_results/dual_fit_avgsmootherror_learn_results.csv')
 
     single_fit_df = []
     dual_fit_df = []
@@ -253,10 +259,10 @@ if __name__ == '__main__':
         print('cv iteration done: ', i)
 
     df_full_single = pd.concat(single_fit_df)
-    df_full_single.to_csv('model_results/single_fit_avgerror_learn_results_cv.csv', index = False)
+    df_full_single.to_csv('model_results/single_fit_avgsmootherror_learn_results_cv.csv', index = False)
 
     df_full_dual = pd.concat(dual_fit_df)
-    df_full_dual.to_csv('model_results/dual_fit_avgerror_learn_results_cv.csv', index=False)
+    df_full_dual.to_csv('model_results/dual_fit_avgsmootherror_learn_results_cv.csv', index=False)
 
 
     # dual_fit_results = pool.map(fit_dual, participant)
