@@ -28,23 +28,23 @@ def single_state_model(A, B, num_trials, p_type):
     else:
         rotation = np.pi/18
         for trial in range(1, num_trials):
-            error[trial-1] = np.abs(rotation - rotation_estimate[trial-1])
-            # error[trial-1] = rotation - rotation_estimate[trial-1]
+            # error[trial-1] = np.abs(rotation - rotation_estimate[trial-1])
+            error[trial-1] = rotation - rotation_estimate[trial-1]
 
             rotation_estimate[trial] = A*rotation_estimate[trial-1] + B*error[trial-1]
             if trial%64 == 0:
-                if rotation < np.pi/3:
+                if trial <= 64*5:
                     rotation = rotation + np.pi/18
+                elif trial in range(64*7 - 1, 64*8 - 1):
+                    rotation = -np.pi/3
                 else:
                     rotation = np.pi/3
 
-            if trial in range(64*7 - 1, 64*8 - 1):
-            # if trial > 64*7 - 1 and trial <  64*8 - 1:
+            
 
-                rotation = -np.pi/3
 
-    error[trial] = np.abs(rotation - rotation_estimate[trial])
-    # error[trial-1] = rotation - rotation_estimate[trial-1]
+    # error[trial] = np.abs(rotation - rotation_estimate[trial])
+    error[trial-1] = rotation - rotation_estimate[trial-1]
 
     return np.abs(error)
 
@@ -84,18 +84,17 @@ def dual_state_model(As, Bs, Af, Bf, num_trials, p_type):
             rotation_estimate[trial] = fast_estimate[trial] + slow_estimate[trial]
 
             if trial%64 == 0:
-                if rotation < np.pi/3:
+                if trial <= 64*5:
                     rotation = rotation + np.pi/18
+                elif trial in range(64*7 - 1, 64*8 - 1):
+                    rotation = -np.pi/3
                 else:
                     rotation = np.pi/3
-
-            if trial > 64*7 - 1 and trial < 64*8:
-                rotation = -np.pi/3
 
     # error[trial] = np.abs(rotation - rotation_estimate[trial-1])
     error[trial-1] = rotation - rotation_estimate[trial-1]
 
-    return error
+    return np.abs(error)
 
 def calc_log_likelihood(params, data, model, p_type, fit_type = 'regular', train_indices = None):
     if model == 'single state':
@@ -110,7 +109,7 @@ def calc_log_likelihood(params, data, model, p_type, fit_type = 'regular', train
     if fit_type == 'cv':
         train_data = data[train_indices]
         train_model_pred = model_pred[train_indices]
-        log_lik = np.mean(stat.norm.logpdf(train_data, train_model_pred, params[-1]))
+        log_lik = np.sum(stat.norm.logpdf(train_data, train_model_pred, params[-1]))
         # if model == 'dual state':
         #     if params[0] < params[2]  or params[1] > params[3]:
         #         return 100000        
@@ -118,7 +117,7 @@ def calc_log_likelihood(params, data, model, p_type, fit_type = 'regular', train
     else:
         
 
-        log_lik = np.mean(stat.norm.logpdf(data, model_pred, params[-1]))
+        log_lik = np.sum(stat.norm.logpdf(data, model_pred, params[-1]))
     # print(params)
     return -log_lik
 
